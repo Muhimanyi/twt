@@ -1,0 +1,2652 @@
+<!DOCTYPE html>
+<html lang="fr" class="antialiased">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="pdf2htmlEX" />
+    <title>Visualiseur de Document - TWT</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pdfGray: '#9e9e9e',
+                        sidebarDark: '#2f3236',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        .pf {
+            position: relative;
+            background-color: white;
+            overflow: hidden;
+            margin: 0;
+            border: 0;
+        }
+
+        @media screen {
+            #sidebar.opened+#page-container {
+                left: 250px
+            }
+
+            #page-container {
+                bottom: 0;
+                right: 0;
+                overflow: auto
+            }
+
+            .loading-indicator {
+                display: none
+            }
+
+            .loading-indicator.active {
+                display: block;
+                position: absolute;
+                width: 64px;
+                height: 64px;
+                top: 50%;
+                left: 50%;
+                margin-top: -32px;
+                margin-left: -32px
+            }
+        }
+
+        @media print {
+            @page {
+                margin: 0
+            }
+
+            html {
+                margin: 0
+            }
+
+            body {
+                margin: 0;
+                -webkit-print-color-adjust: exact
+            }
+
+            #sidebar {
+                display: none
+            }
+
+            #page-container {
+                width: auto;
+                height: auto;
+                overflow: visible;
+                background-color: transparent
+            }
+
+            .d {
+                display: none
+            }
+        }
+
+        .pf {
+            position: relative;
+            background-color: white;
+            overflow: hidden;
+            margin: 0;
+            border: 0
+        }
+
+        .pc {
+            position: absolute;
+            border: 0;
+            padding: 0;
+            margin: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: block;
+            transform-origin: 0 0;
+            -ms-transform-origin: 0 0;
+            -webkit-transform-origin: 0 0
+        }
+
+        .pc.opened {
+            display: block
+        }
+
+        .bf {
+            position: absolute;
+            border: 0;
+            margin: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            user-select: none
+        }
+
+        .bi {
+            position: absolute;
+            border: 0;
+            margin: 0;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            user-select: none
+        }
+
+        @media print {
+            .pf {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+                page-break-inside: avoid
+            }
+
+            @-moz-document url-prefix() {
+                .pf {
+                    overflow: visible;
+                    border: 1px solid #fff
+                }
+
+                .pc {
+                    overflow: visible
+                }
+            }
+        }
+
+        .c {
+            position: absolute;
+            border: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            display: block
+        }
+
+        .t {
+            position: absolute;
+            white-space: pre;
+            font-size: 1px;
+            transform-origin: 0 100%;
+            -ms-transform-origin: 0 100%;
+            -webkit-transform-origin: 0 100%;
+            unicode-bidi: bidi-override;
+            -moz-font-feature-settings: "liga" 0
+        }
+
+        .t:after {
+            content: ''
+        }
+
+        .t:before {
+            content: '';
+            display: inline-block
+        }
+
+        .t span {
+            position: relative;
+            unicode-bidi: bidi-override
+        }
+
+        ._ {
+            display: inline-block;
+            color: transparent;
+            z-index: -1
+        }
+
+        ::selection {
+            background: rgba(127, 255, 255, 0.4)
+        }
+
+        ::-moz-selection {
+            background: rgba(127, 255, 255, 0.4)
+        }
+
+        .pi {
+            display: none
+        }
+
+        .d {
+            position: absolute;
+            transform-origin: 0 100%;
+            -ms-transform-origin: 0 100%;
+            -webkit-transform-origin: 0 100%
+        }
+
+        .it {
+            border: 0;
+            background-color: rgba(255, 255, 255, 0.0)
+        }
+
+        .ir:hover {
+            cursor: pointer
+        }
+    </style>
+    <style type="text/css">
+        @keyframes fadein {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        @-webkit-keyframes fadein {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes swing {
+            0 {
+                transform: rotate(0)
+            }
+
+            10% {
+                transform: rotate(0)
+            }
+
+            90% {
+                transform: rotate(720deg)
+            }
+
+            100% {
+                transform: rotate(720deg)
+            }
+        }
+
+        @-webkit-keyframes swing {
+            0 {
+                -webkit-transform: rotate(0)
+            }
+
+            10% {
+                -webkit-transform: rotate(0)
+            }
+
+            90% {
+                -webkit-transform: rotate(720deg)
+            }
+
+            100% {
+                -webkit-transform: rotate(720deg)
+            }
+        }
+
+        @media screen {
+            #outline {
+                font-family: Georgia, Times, "Times New Roman", serif;
+                font-size: 13px;
+                margin: 2em 1em
+            }
+
+            #outline ul {
+                padding: 0
+            }
+
+            #outline li {
+                list-style-type: none;
+                margin: 1em 0
+            }
+
+            #outline li>ul {
+                margin-left: 1em
+            }
+
+            #outline a,
+            #outline a:visited,
+            #outline a:hover,
+            #outline a:active {
+                line-height: 1.2;
+                color: #e8e8e8;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                text-decoration: none;
+                display: block;
+                overflow: hidden;
+                outline: 0
+            }
+
+            #outline a:hover {
+                color: #0cf
+            }
+
+            #page-container {
+                background-color: #9e9e9e;
+                -webkit-transition: left 500ms;
+                transition: left 500ms
+            }
+
+            .pf {
+                margin: 13px auto;
+                box-shadow: 1px 1px 3px 1px #333;
+                border-collapse: separate
+            }
+
+            .pc.opened {
+                -webkit-animation: fadein 100ms;
+                animation: fadein 100ms
+            }
+
+            .loading-indicator.active {
+                -webkit-animation: swing 1.5s ease-in-out .01s infinite alternate none;
+                animation: swing 1.5s ease-in-out .01s infinite alternate none
+            }
+        }
+    </style>
+    <style type="text/css">
+        .ff0 {
+            font-family: sans-serif;
+            visibility: hidden;
+        }
+
+        .ff1 {
+            font-family: ff1;
+            line-height: 0.682617;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff2 {
+            font-family: ff2;
+            line-height: 0.926270;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff3 {
+            font-family: ff3;
+            line-height: 0.926270;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff4 {
+            font-family: ff4;
+            line-height: 0.999023;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff5 {
+            font-family: ff5;
+            line-height: 0.999023;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff6 {
+            font-family: ff6;
+            line-height: 0.929688;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff7 {
+            font-family: ff7;
+            line-height: 0.929688;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff8 {
+            font-family: ff8;
+            line-height: 0.730469;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff9 {
+            font-family: ff9;
+            line-height: 1.037109;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ffa {
+            font-family: ffa;
+            line-height: 1.346191;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ffb {
+            font-family: ffb;
+            line-height: 0.666000;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ffc {
+            font-family: ffc;
+            line-height: 0.810547;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ffd {
+            font-family: ffd;
+            line-height: 0.810547;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ffe {
+            font-family: ffe;
+            line-height: 0.682617;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .fff {
+            font-family: fff;
+            line-height: 1.383301;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff10 {
+            font-family: ff10;
+            line-height: 1.024902;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff11 {
+            font-family: ff11;
+            line-height: 1.024902;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff12 {
+            font-family: ff12;
+            line-height: 0.713250;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff13 {
+            font-family: ff13;
+            line-height: 0.713250;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .ff14 {
+            font-family: ff14;
+            line-height: 1.024902;
+            font-style: normal;
+            font-weight: normal;
+            visibility: visible;
+        }
+
+        .m10 {
+            transform: matrix(0.000000, 0.250000, -0.250000, 0.000000, 0, 0);
+            -ms-transform: matrix(0.000000, 0.250000, -0.250000, 0.000000, 0, 0);
+            -webkit-transform: matrix(0.000000, 0.250000, -0.250000, 0.000000, 0, 0);
+        }
+
+        .mf {
+            transform: matrix(0.192308, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.192308, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.192308, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m9 {
+            transform: matrix(0.194445, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.194445, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.194445, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .mc {
+            transform: matrix(0.197368, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.197368, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.197368, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m5 {
+            transform: matrix(0.200000, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.200000, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.200000, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m13 {
+            transform: matrix(0.200893, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.200893, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.200893, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m11 {
+            transform: matrix(0.200980, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.200980, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.200980, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m2 {
+            transform: matrix(0.201390, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.201390, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.201390, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m6 {
+            transform: matrix(0.201613, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.201613, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.201613, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m8 {
+            transform: matrix(0.201923, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.201923, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.201923, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .md {
+            transform: matrix(0.202940, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.202940, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.202940, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .mb {
+            transform: matrix(0.203298, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.203298, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.203298, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m3 {
+            transform: matrix(0.203703, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.203703, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.203703, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .me {
+            transform: matrix(0.204083, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.204083, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.204083, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m12 {
+            transform: matrix(0.204545, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.204545, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.204545, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .ma {
+            transform: matrix(0.205357, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.205357, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.205357, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m7 {
+            transform: matrix(0.206140, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.206140, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.206140, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m1 {
+            transform: matrix(0.207318, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.207318, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.207318, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m4 {
+            transform: matrix(0.207448, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.207448, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.207448, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .m0 {
+            transform: matrix(0.250000, 0.000000, 0.000000, 0.250000, 0, 0);
+            -ms-transform: matrix(0.250000, 0.000000, 0.000000, 0.250000, 0, 0);
+            -webkit-transform: matrix(0.250000, 0.000000, 0.000000, 0.250000, 0, 0);
+        }
+
+        .v0 {
+            vertical-align: 0.000000px;
+        }
+
+        .lsd {
+            letter-spacing: -0.178000px;
+        }
+
+        .lsb {
+            letter-spacing: -0.160000px;
+        }
+
+        .lsf {
+            letter-spacing: -0.114000px;
+        }
+
+        .lsa {
+            letter-spacing: 0.000000px;
+        }
+
+        .ls9 {
+            letter-spacing: 0.008000px;
+        }
+
+        .ls0 {
+            letter-spacing: 0.011280px;
+        }
+
+        .ls8 {
+            letter-spacing: 0.051875px;
+        }
+
+        .ls10 {
+            letter-spacing: 0.104000px;
+        }
+
+        .ls2 {
+            letter-spacing: 0.168000px;
+        }
+
+        .ls3 {
+            letter-spacing: 0.264000px;
+        }
+
+        .ls7 {
+            letter-spacing: 0.311846px;
+        }
+
+        .ls4 {
+            letter-spacing: 0.312000px;
+        }
+
+        .ls6 {
+            letter-spacing: 0.341927px;
+        }
+
+        .ls5 {
+            letter-spacing: 0.458845px;
+        }
+
+        .lsc {
+            letter-spacing: 0.496000px;
+        }
+
+        .lse {
+            letter-spacing: 0.592000px;
+        }
+
+        .ls11 {
+            letter-spacing: 0.832000px;
+        }
+
+        .ls1 {
+            letter-spacing: 23.101421px;
+        }
+
+        .sc_ {
+            text-shadow: none;
+        }
+
+        .sc5 {
+            text-shadow: -0.015em 0 rgb(0, 32, 96), 0 0.015em rgb(0, 32, 96), 0.015em 0 rgb(0, 32, 96), 0 -0.015em rgb(0, 32, 96);
+        }
+
+        .sc2 {
+            text-shadow: -0.015em 0 rgb(0, 102, 0), 0 0.015em rgb(0, 102, 0), 0.015em 0 rgb(0, 102, 0), 0 -0.015em rgb(0, 102, 0);
+        }
+
+        .sc4 {
+            text-shadow: -0.015em 0 rgb(13, 13, 13), 0 0.015em rgb(13, 13, 13), 0.015em 0 rgb(13, 13, 13), 0 -0.015em rgb(13, 13, 13);
+        }
+
+        .sc3 {
+            text-shadow: -0.015em 0 rgb(0, 0, 0), 0 0.015em rgb(0, 0, 0), 0.015em 0 rgb(0, 0, 0), 0 -0.015em rgb(0, 0, 0);
+        }
+
+        .sc1 {
+            text-shadow: -0.015em 0 rgb(68, 84, 106), 0 0.015em rgb(68, 84, 106), 0.015em 0 rgb(68, 84, 106), 0 -0.015em rgb(68, 84, 106);
+        }
+
+        .sc0 {
+            text-shadow: -0.015em 0 transparent, 0 0.015em transparent, 0.015em 0 transparent, 0 -0.015em transparent;
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio:0) {
+            .sc_ {
+                -webkit-text-stroke: 0px transparent;
+            }
+
+            .sc5 {
+                -webkit-text-stroke: 0.015em rgb(0, 32, 96);
+                text-shadow: none;
+            }
+
+            .sc2 {
+                -webkit-text-stroke: 0.015em rgb(0, 102, 0);
+                text-shadow: none;
+            }
+
+            .sc4 {
+                -webkit-text-stroke: 0.015em rgb(13, 13, 13);
+                text-shadow: none;
+            }
+
+            .sc3 {
+                -webkit-text-stroke: 0.015em rgb(0, 0, 0);
+                text-shadow: none;
+            }
+
+            .sc1 {
+                -webkit-text-stroke: 0.015em rgb(68, 84, 106);
+                text-shadow: none;
+            }
+
+            .sc0 {
+                -webkit-text-stroke: 0.015em transparent;
+                text-shadow: none;
+            }
+        }
+
+        .ws0 {
+            word-spacing: -48.000000px;
+        }
+
+        .ws1 {
+            word-spacing: -47.840000px;
+        }
+
+        .ws9 {
+            word-spacing: -14.364000px;
+        }
+
+        .ws6 {
+            word-spacing: -14.084000px;
+        }
+
+        .ws7 {
+            word-spacing: -14.036000px;
+        }
+
+        .ws5 {
+            word-spacing: -13.772000px;
+        }
+
+        .wsb {
+            word-spacing: -13.724000px;
+        }
+
+        .wsa {
+            word-spacing: -13.658000px;
+        }
+
+        .ws8 {
+            word-spacing: -13.594000px;
+        }
+
+        .ws3 {
+            word-spacing: -10.128000px;
+        }
+
+        .ws2 {
+            word-spacing: -9.632000px;
+        }
+
+        .ws4 {
+            word-spacing: -7.224000px;
+        }
+
+        .wsc {
+            word-spacing: 0.000000px;
+        }
+
+        ._7 {
+            margin-left: -3.519939px;
+        }
+
+        ._6 {
+            margin-left: -2.464000px;
+        }
+
+        ._4 {
+            margin-left: -1.144000px;
+        }
+
+        ._0 {
+            width: 1.120000px;
+        }
+
+        ._1 {
+            width: 3.034893px;
+        }
+
+        ._3 {
+            width: 46.218523px;
+        }
+
+        ._5 {
+            width: 153.270523px;
+        }
+
+        ._2 {
+            width: 182.594523px;
+        }
+
+        .fcb {
+            color: transparent;
+        }
+
+        .fca {
+            color: rgb(0, 32, 96);
+        }
+
+        .fc6 {
+            color: rgb(0, 0, 153);
+        }
+
+        .fc5 {
+            color: rgb(0, 102, 0);
+        }
+
+        .fc3 {
+            color: rgb(255, 0, 0);
+        }
+
+        .fc9 {
+            color: rgb(192, 0, 0);
+        }
+
+        .fc1 {
+            color: rgb(0, 112, 192);
+        }
+
+        .fc8 {
+            color: rgb(38, 38, 38);
+        }
+
+        .fc7 {
+            color: rgb(13, 13, 13);
+        }
+
+        .fc4 {
+            color: rgb(68, 84, 106);
+        }
+
+        .fc2 {
+            color: rgb(0, 176, 80);
+        }
+
+        .fc0 {
+            color: rgb(0, 0, 0);
+        }
+
+        .fs5 {
+            font-size: 4.000000px;
+        }
+
+        .fsb {
+            font-size: 8.000000px;
+        }
+
+        .fsd {
+            font-size: 12.000000px;
+        }
+
+        .fs9 {
+            font-size: 16.000000px;
+        }
+
+        .fs3 {
+            font-size: 24.000000px;
+        }
+
+        .fs8 {
+            font-size: 28.000000px;
+        }
+
+        .fs2 {
+            font-size: 32.000000px;
+        }
+
+        .fs1 {
+            font-size: 36.000000px;
+        }
+
+        .fs4 {
+            font-size: 40.000000px;
+        }
+
+        .fsc {
+            font-size: 44.000000px;
+        }
+
+        .fs0 {
+            font-size: 48.000000px;
+        }
+
+        .fsa {
+            font-size: 60.000000px;
+        }
+
+        .fse {
+            font-size: 72.000000px;
+        }
+
+        .fs7 {
+            font-size: 80.000000px;
+        }
+
+        .fs6 {
+            font-size: 96.000000px;
+        }
+
+        .y0 {
+            bottom: -0.500000px;
+        }
+
+        .y1 {
+            bottom: 0.000000px;
+        }
+
+        .y30 {
+            bottom: 2.800000px;
+        }
+
+        .y8 {
+            bottom: 5.025000px;
+        }
+
+        .y39 {
+            bottom: 7.500000px;
+        }
+
+        .y35 {
+            bottom: 14.500000px;
+        }
+
+        .y2f {
+            bottom: 16.100000px;
+        }
+
+        .y7 {
+            bottom: 16.225000px;
+        }
+
+        .y38 {
+            bottom: 18.800000px;
+        }
+
+        .y6 {
+            bottom: 25.525000px;
+        }
+
+        .y34 {
+            bottom: 26.600000px;
+        }
+
+        .y2e {
+            bottom: 29.400000px;
+        }
+
+        .y31 {
+            bottom: 30.800000px;
+        }
+
+        .y37 {
+            bottom: 32.100000px;
+        }
+
+        .y5 {
+            bottom: 35.025000px;
+        }
+
+        .y2d {
+            bottom: 41.010000px;
+        }
+
+        .y36 {
+            bottom: 45.425000px;
+        }
+
+        .y4 {
+            bottom: 45.925000px;
+        }
+
+        .y2c {
+            bottom: 46.300000px;
+        }
+
+        .y33 {
+            bottom: 56.825000px;
+        }
+
+        .y2b {
+            bottom: 59.600000px;
+        }
+
+        .y3 {
+            bottom: 59.725000px;
+        }
+
+        .y2a {
+            bottom: 72.930000px;
+        }
+
+        .y29 {
+            bottom: 86.130000px;
+        }
+
+        .y28 {
+            bottom: 99.430000px;
+        }
+
+        .y18 {
+            bottom: 100.320000px;
+        }
+
+        .y27 {
+            bottom: 112.730000px;
+        }
+
+        .y26 {
+            bottom: 126.030000px;
+        }
+
+        .y25 {
+            bottom: 139.230000px;
+        }
+
+        .y24 {
+            bottom: 152.530000px;
+        }
+
+        .y23 {
+            bottom: 165.830000px;
+        }
+
+        .y22 {
+            bottom: 179.130000px;
+        }
+
+        .y21 {
+            bottom: 190.930000px;
+        }
+
+        .y20 {
+            bottom: 197.230000px;
+        }
+
+        .y1f {
+            bottom: 210.530000px;
+        }
+
+        .y1e {
+            bottom: 223.730000px;
+        }
+
+        .y1d {
+            bottom: 237.030000px;
+        }
+
+        .y1c {
+            bottom: 250.350000px;
+        }
+
+        .y1b {
+            bottom: 263.650000px;
+        }
+
+        .y1a {
+            bottom: 276.850000px;
+        }
+
+        .y19 {
+            bottom: 290.150000px;
+        }
+
+        .y17 {
+            bottom: 372.970000px;
+        }
+
+        .y16 {
+            bottom: 381.880000px;
+        }
+
+        .y15 {
+            bottom: 387.770000px;
+        }
+
+        .y14 {
+            bottom: 410.970000px;
+        }
+
+        .y32 {
+            bottom: 411.950000px;
+        }
+
+        .y13 {
+            bottom: 427.880000px;
+        }
+
+        .y12 {
+            bottom: 448.170000px;
+        }
+
+        .y11 {
+            bottom: 455.670000px;
+        }
+
+        .y10 {
+            bottom: 480.770000px;
+        }
+
+        .yf {
+            bottom: 486.670000px;
+        }
+
+        .ye {
+            bottom: 488.880000px;
+        }
+
+        .yd {
+            bottom: 497.170000px;
+        }
+
+        .yc {
+            bottom: 511.100000px;
+        }
+
+        .yb {
+            bottom: 529.000000px;
+        }
+
+        .ya {
+            bottom: 548.600000px;
+        }
+
+        .y9 {
+            bottom: 567.800000px;
+        }
+
+        .y2 {
+            bottom: 571.100000px;
+        }
+
+        .h9 {
+            height: 3.160156px;
+        }
+
+        .hf {
+            height: 4.158203px;
+        }
+
+        .h16 {
+            height: 5.332031px;
+        }
+
+        .h1b {
+            height: 9.820312px;
+        }
+
+        .h12 {
+            height: 11.953125px;
+        }
+
+        .h1a {
+            height: 13.093750px;
+        }
+
+        .h10 {
+            height: 17.929688px;
+        }
+
+        .h6 {
+            height: 18.960938px;
+        }
+
+        .hd {
+            height: 19.851562px;
+        }
+
+        .h8 {
+            height: 23.000000px;
+        }
+
+        .he {
+            height: 24.949219px;
+        }
+
+        .h5 {
+            height: 25.281250px;
+        }
+
+        .h17 {
+            height: 26.660156px;
+        }
+
+        .h4 {
+            height: 28.441406px;
+        }
+
+        .h21 {
+            height: 29.460938px;
+        }
+
+        .h7 {
+            height: 29.882812px;
+        }
+
+        .h2 {
+            height: 31.992188px;
+        }
+
+        .h1f {
+            height: 32.734375px;
+        }
+
+        .h3 {
+            height: 34.359375px;
+        }
+
+        .hb {
+            height: 35.859375px;
+        }
+
+        .h19 {
+            height: 36.007812px;
+        }
+
+        .h1e {
+            height: 36.600000px;
+        }
+
+        .h14 {
+            height: 39.990234px;
+        }
+
+        .h20 {
+            height: 43.100000px;
+        }
+
+        .h1d {
+            height: 49.680064px;
+        }
+
+        .hc {
+            height: 56.718750px;
+        }
+
+        .h11 {
+            height: 63.936000px;
+        }
+
+        .h13 {
+            height: 64.140625px;
+        }
+
+        .ha {
+            height: 68.062500px;
+        }
+
+        .h15 {
+            height: 84.453125px;
+        }
+
+        .h18 {
+            height: 301.150000px;
+        }
+
+        .h1c {
+            height: 437.400000px;
+        }
+
+        .h0 {
+            height: 595.300000px;
+        }
+
+        .h1 {
+            height: 596.000000px;
+        }
+
+        .w4 {
+            width: 50.100000px;
+        }
+
+        .w5 {
+            width: 165.550000px;
+        }
+
+        .w6 {
+            width: 202.520000px;
+        }
+
+        .w3 {
+            width: 323.580000px;
+        }
+
+        .w2 {
+            width: 419.599994px;
+        }
+
+        .w0 {
+            width: 419.600000px;
+        }
+
+        .w1 {
+            width: 420.000000px;
+        }
+
+        .x0 {
+            left: 0.000000px;
+        }
+
+        .x1f {
+            left: 4.700000px;
+        }
+
+        .x16 {
+            left: 7.200000px;
+        }
+
+        .x1b {
+            left: 10.900000px;
+        }
+
+        .x19 {
+            left: 19.350000px;
+        }
+
+        .x2 {
+            left: 21.299994px;
+        }
+
+        .x1a {
+            left: 22.400000px;
+        }
+
+        .x12 {
+            left: 29.599994px;
+        }
+
+        .x13 {
+            left: 30.999994px;
+        }
+
+        .x1e {
+            left: 32.600000px;
+        }
+
+        .x15 {
+            left: 34.400000px;
+        }
+
+        .x1c {
+            left: 47.225000px;
+        }
+
+        .xd {
+            left: 64.524994px;
+        }
+
+        .x1 {
+            left: 70.924994px;
+        }
+
+        .x9 {
+            left: 116.329994px;
+        }
+
+        .x11 {
+            left: 127.619994px;
+        }
+
+        .xc {
+            left: 143.519994px;
+        }
+
+        .x1d {
+            left: 183.350000px;
+        }
+
+        .x5 {
+            left: 190.349994px;
+        }
+
+        .x6 {
+            left: 199.349994px;
+        }
+
+        .x3 {
+            left: 203.049994px;
+        }
+
+        .xf {
+            left: 206.249994px;
+        }
+
+        .x14 {
+            left: 216.849994px;
+        }
+
+        .x10 {
+            left: 220.449994px;
+        }
+
+        .x4 {
+            left: 297.779994px;
+        }
+
+        .x17 {
+            left: 323.580000px;
+        }
+
+        .xa {
+            left: 324.679994px;
+        }
+
+        .x18 {
+            left: 330.880000px;
+        }
+
+        .xb {
+            left: 331.979994px;
+        }
+
+        .xe {
+            left: 362.169994px;
+        }
+
+        .x7 {
+            left: 368.269994px;
+        }
+
+        .x8 {
+            left: 405.499994px;
+        }
+
+        @media print {
+            .v0 {
+                vertical-align: 0.000000pt;
+            }
+
+            .lsd {
+                letter-spacing: -0.237333pt;
+            }
+
+            .lsb {
+                letter-spacing: -0.213333pt;
+            }
+
+            .lsf {
+                letter-spacing: -0.152000pt;
+            }
+
+            .lsa {
+                letter-spacing: 0.000000pt;
+            }
+
+            .ls9 {
+                letter-spacing: 0.010667pt;
+            }
+
+            .ls0 {
+                letter-spacing: 0.015040pt;
+            }
+
+            .ls8 {
+                letter-spacing: 0.069167pt;
+            }
+
+            .ls10 {
+                letter-spacing: 0.138667pt;
+            }
+
+            .ls2 {
+                letter-spacing: 0.224000pt;
+            }
+
+            .ls3 {
+                letter-spacing: 0.352000pt;
+            }
+
+            .ls7 {
+                letter-spacing: 0.415795pt;
+            }
+
+            .ls4 {
+                letter-spacing: 0.416000pt;
+            }
+
+            .ls6 {
+                letter-spacing: 0.455903pt;
+            }
+
+            .ls5 {
+                letter-spacing: 0.611794pt;
+            }
+
+            .lsc {
+                letter-spacing: 0.661333pt;
+            }
+
+            .lse {
+                letter-spacing: 0.789333pt;
+            }
+
+            .ls11 {
+                letter-spacing: 1.109333pt;
+            }
+
+            .ls1 {
+                letter-spacing: 30.801895pt;
+            }
+
+            .ws0 {
+                word-spacing: -64.000000pt;
+            }
+
+            .ws1 {
+                word-spacing: -63.786667pt;
+            }
+
+            .ws9 {
+                word-spacing: -19.152000pt;
+            }
+
+            .ws6 {
+                word-spacing: -18.778667pt;
+            }
+
+            .ws7 {
+                word-spacing: -18.714667pt;
+            }
+
+            .ws5 {
+                word-spacing: -18.362667pt;
+            }
+
+            .wsb {
+                word-spacing: -18.298667pt;
+            }
+
+            .wsa {
+                word-spacing: -18.210667pt;
+            }
+
+            .ws8 {
+                word-spacing: -18.125333pt;
+            }
+
+            .ws3 {
+                word-spacing: -13.504000pt;
+            }
+
+            .ws2 {
+                word-spacing: -12.842667pt;
+            }
+
+            .ws4 {
+                word-spacing: -9.632000pt;
+            }
+
+            .wsc {
+                word-spacing: 0.000000pt;
+            }
+
+            ._7 {
+                margin-left: -4.693253pt;
+            }
+
+            ._6 {
+                margin-left: -3.285333pt;
+            }
+
+            ._4 {
+                margin-left: -1.525333pt;
+            }
+
+            ._0 {
+                width: 1.493333pt;
+            }
+
+            ._1 {
+                width: 4.046524pt;
+            }
+
+            ._3 {
+                width: 61.624697pt;
+            }
+
+            ._5 {
+                width: 204.360697pt;
+            }
+
+            ._2 {
+                width: 243.459364pt;
+            }
+
+            .fs5 {
+                font-size: 5.333333pt;
+            }
+
+            .fsb {
+                font-size: 10.666667pt;
+            }
+
+            .fsd {
+                font-size: 16.000000pt;
+            }
+
+            .fs9 {
+                font-size: 21.333333pt;
+            }
+
+            .fs3 {
+                font-size: 32.000000pt;
+            }
+
+            .fs8 {
+                font-size: 37.333333pt;
+            }
+
+            .fs2 {
+                font-size: 42.666667pt;
+            }
+
+            .fs1 {
+                font-size: 48.000000pt;
+            }
+
+            .fs4 {
+                font-size: 53.333333pt;
+            }
+
+            .fsc {
+                font-size: 58.666667pt;
+            }
+
+            .fs0 {
+                font-size: 64.000000pt;
+            }
+
+            .fsa {
+                font-size: 80.000000pt;
+            }
+
+            .fse {
+                font-size: 96.000000pt;
+            }
+
+            .fs7 {
+                font-size: 106.666667pt;
+            }
+
+            .fs6 {
+                font-size: 128.000000pt;
+            }
+
+            .y0 {
+                bottom: -0.666667pt;
+            }
+
+            .y1 {
+                bottom: 0.000000pt;
+            }
+
+            .y30 {
+                bottom: 3.733333pt;
+            }
+
+            .y8 {
+                bottom: 6.700000pt;
+            }
+
+            .y39 {
+                bottom: 10.000000pt;
+            }
+
+            .y35 {
+                bottom: 19.333333pt;
+            }
+
+            .y2f {
+                bottom: 21.466667pt;
+            }
+
+            .y7 {
+                bottom: 21.633333pt;
+            }
+
+            .y38 {
+                bottom: 25.066667pt;
+            }
+
+            .y6 {
+                bottom: 34.033333pt;
+            }
+
+            .y34 {
+                bottom: 35.466667pt;
+            }
+
+            .y2e {
+                bottom: 39.200000pt;
+            }
+
+            .y31 {
+                bottom: 41.066667pt;
+            }
+
+            .y37 {
+                bottom: 42.800000pt;
+            }
+
+            .y5 {
+                bottom: 46.700000pt;
+            }
+
+            .y2d {
+                bottom: 54.680000pt;
+            }
+
+            .y36 {
+                bottom: 60.566667pt;
+            }
+
+            .y4 {
+                bottom: 61.233333pt;
+            }
+
+            .y2c {
+                bottom: 61.733333pt;
+            }
+
+            .y33 {
+                bottom: 75.766667pt;
+            }
+
+            .y2b {
+                bottom: 79.466667pt;
+            }
+
+            .y3 {
+                bottom: 79.633333pt;
+            }
+
+            .y2a {
+                bottom: 97.240000pt;
+            }
+
+            .y29 {
+                bottom: 114.840000pt;
+            }
+
+            .y28 {
+                bottom: 132.573333pt;
+            }
+
+            .y18 {
+                bottom: 133.760000pt;
+            }
+
+            .y27 {
+                bottom: 150.306667pt;
+            }
+
+            .y26 {
+                bottom: 168.040000pt;
+            }
+
+            .y25 {
+                bottom: 185.640000pt;
+            }
+
+            .y24 {
+                bottom: 203.373333pt;
+            }
+
+            .y23 {
+                bottom: 221.106667pt;
+            }
+
+            .y22 {
+                bottom: 238.840000pt;
+            }
+
+            .y21 {
+                bottom: 254.573333pt;
+            }
+
+            .y20 {
+                bottom: 262.973333pt;
+            }
+
+            .y1f {
+                bottom: 280.706667pt;
+            }
+
+            .y1e {
+                bottom: 298.306667pt;
+            }
+
+            .y1d {
+                bottom: 316.040000pt;
+            }
+
+            .y1c {
+                bottom: 333.800000pt;
+            }
+
+            .y1b {
+                bottom: 351.533333pt;
+            }
+
+            .y1a {
+                bottom: 369.133333pt;
+            }
+
+            .y19 {
+                bottom: 386.866667pt;
+            }
+
+            .y17 {
+                bottom: 497.293333pt;
+            }
+
+            .y16 {
+                bottom: 509.173333pt;
+            }
+
+            .y15 {
+                bottom: 517.026667pt;
+            }
+
+            .y14 {
+                bottom: 547.960000pt;
+            }
+
+            .y32 {
+                bottom: 549.266667pt;
+            }
+
+            .y13 {
+                bottom: 570.506667pt;
+            }
+
+            .y12 {
+                bottom: 597.560000pt;
+            }
+
+            .y11 {
+                bottom: 607.560000pt;
+            }
+
+            .y10 {
+                bottom: 641.026667pt;
+            }
+
+            .yf {
+                bottom: 648.893333pt;
+            }
+
+            .ye {
+                bottom: 651.840000pt;
+            }
+
+            .yd {
+                bottom: 662.893333pt;
+            }
+
+            .yc {
+                bottom: 681.466667pt;
+            }
+
+            .yb {
+                bottom: 705.333333pt;
+            }
+
+            .ya {
+                bottom: 731.466667pt;
+            }
+
+            .y9 {
+                bottom: 757.066667pt;
+            }
+
+            .y2 {
+                bottom: 761.466667pt;
+            }
+
+            .h9 {
+                height: 4.213542pt;
+            }
+
+            .hf {
+                height: 5.544271pt;
+            }
+
+            .h16 {
+                height: 7.109375pt;
+            }
+
+            .h1b {
+                height: 13.093750pt;
+            }
+
+            .h12 {
+                height: 15.937500pt;
+            }
+
+            .h1a {
+                height: 17.458333pt;
+            }
+
+            .h10 {
+                height: 23.906250pt;
+            }
+
+            .h6 {
+                height: 25.281250pt;
+            }
+
+            .hd {
+                height: 26.468750pt;
+            }
+
+            .h8 {
+                height: 30.666667pt;
+            }
+
+            .he {
+                height: 33.265625pt;
+            }
+
+            .h5 {
+                height: 33.708333pt;
+            }
+
+            .h17 {
+                height: 35.546875pt;
+            }
+
+            .h4 {
+                height: 37.921875pt;
+            }
+
+            .h21 {
+                height: 39.281250pt;
+            }
+
+            .h7 {
+                height: 39.843750pt;
+            }
+
+            .h2 {
+                height: 42.656250pt;
+            }
+
+            .h1f {
+                height: 43.645833pt;
+            }
+
+            .h3 {
+                height: 45.812500pt;
+            }
+
+            .hb {
+                height: 47.812500pt;
+            }
+
+            .h19 {
+                height: 48.010417pt;
+            }
+
+            .h1e {
+                height: 48.800000pt;
+            }
+
+            .h14 {
+                height: 53.320312pt;
+            }
+
+            .h20 {
+                height: 57.466667pt;
+            }
+
+            .h1d {
+                height: 66.240085pt;
+            }
+
+            .hc {
+                height: 75.625000pt;
+            }
+
+            .h11 {
+                height: 85.248000pt;
+            }
+
+            .h13 {
+                height: 85.520833pt;
+            }
+
+            .ha {
+                height: 90.750000pt;
+            }
+
+            .h15 {
+                height: 112.604167pt;
+            }
+
+            .h18 {
+                height: 401.533333pt;
+            }
+
+            .h1c {
+                height: 583.200000pt;
+            }
+
+            .h0 {
+                height: 793.733333pt;
+            }
+
+            .h1 {
+                height: 794.666667pt;
+            }
+
+            .w4 {
+                width: 66.800000pt;
+            }
+
+            .w5 {
+                width: 220.733333pt;
+            }
+
+            .w6 {
+                width: 270.026667pt;
+            }
+
+            .w3 {
+                width: 431.440000pt;
+            }
+
+            .w2 {
+                width: 559.466658pt;
+            }
+
+            .w0 {
+                width: 559.466667pt;
+            }
+
+            .w1 {
+                width: 560.000000pt;
+            }
+
+            .x0 {
+                left: 0.000000pt;
+            }
+
+            .x1f {
+                left: 6.266667pt;
+            }
+
+            .x16 {
+                left: 9.600000pt;
+            }
+
+            .x1b {
+                left: 14.533333pt;
+            }
+
+            .x19 {
+                left: 25.800000pt;
+            }
+
+            .x2 {
+                left: 28.399992pt;
+            }
+
+            .x1a {
+                left: 29.866667pt;
+            }
+
+            .x12 {
+                left: 39.466658pt;
+            }
+
+            .x13 {
+                left: 41.333325pt;
+            }
+
+            .x1e {
+                left: 43.466667pt;
+            }
+
+            .x15 {
+                left: 45.866667pt;
+            }
+
+            .x1c {
+                left: 62.966667pt;
+            }
+
+            .xd {
+                left: 86.033325pt;
+            }
+
+            .x1 {
+                left: 94.566658pt;
+            }
+
+            .x9 {
+                left: 155.106658pt;
+            }
+
+            .x11 {
+                left: 170.159992pt;
+            }
+
+            .xc {
+                left: 191.359992pt;
+            }
+
+            .x1d {
+                left: 244.466667pt;
+            }
+
+            .x5 {
+                left: 253.799992pt;
+            }
+
+            .x6 {
+                left: 265.799992pt;
+            }
+
+            .x3 {
+                left: 270.733325pt;
+            }
+
+            .xf {
+                left: 274.999992pt;
+            }
+
+            .x14 {
+                left: 289.133325pt;
+            }
+
+            .x10 {
+                left: 293.933325pt;
+            }
+
+            .x4 {
+                left: 397.039992pt;
+            }
+
+            .x17 {
+                left: 431.440000pt;
+            }
+
+            .xa {
+                left: 432.906658pt;
+            }
+
+            .x18 {
+                left: 441.173333pt;
+            }
+
+            .xb {
+                left: 442.639992pt;
+            }
+
+            .xe {
+                left: 482.893325pt;
+            }
+
+            .x7 {
+                left: 491.026658pt;
+            }
+
+            .x8 {
+                left: 540.666658pt;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="bg-pdfGray flex h-screen overflow-hidden text-gray-900 font-sans">
+
+
+    <main id="page-container" class="flex-1 overflow-auto relative scroll-smooth bg-pdfGray/40 backdrop-blur-sm">
+        <div class="flex flex-col items-center py-12 space-y-8">
+            <div id="pf1" class="pf w0 h0" data-page-no="1">
+                <div class="pc pc1 w0 h0">
+                    <div class="c x0 y1 w2 h0">
+                        <div class="t m0 x1 h2 y2 ff1 fs0 fc0 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t m0 x2 h3 y3 ff2 fs0 fc0 sc0 lsa ws0">
+                            <span class="fcb sc0">…</span>
+                            </span>
+                            <span class="fcb sc0">…</span>
+                            </span>
+                            <span class="fcb sc0">…</span>
+                            </span>
+                            <span class="fcb sc0">…</span>
+                            </span>
+                            <span class="fcb sc0">…</span>
+
+                            </span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            </span>
+                            <span class="fcb sc0">…</span>
+
+                            </span>
+                            <span class="fcb sc0">…</span>
+                            </span>
+                            <span class="fcb sc0">…</span>
+                            </span>
+                            <span class="fcb sc0">…</span>
+
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">..</span>
+                            <span class="lsb ws1"><span class="fcb sc0">……</span></span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span></span>
+                            <span class="fcb sc0">…</span>
+                        </div>
+                        <div class="t m0 x2 h3 y4 ff2 fs0 fc0 sc0 lsa ws0">
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span>
+                            <span class="fcb sc0">…</span><span class="lsb ws1"><span
+                                    class="fcb sc0">….</span></span><span class="ff3 wsc"><span class="fcb sc0">
+                                </span></span>
+                        </div>
+                        <div class="t m1 x2 h4 y5 ff4 fs1 fc1 sc0 lsa wsc"><span class="fcb sc0">P</span><span
+                                class="fcb sc0">rog</span><span class="fcb sc0">r</span><span
+                                class="fcb sc0">amme</span><span class="fcb sc0"> </span><span
+                                class="fcb sc0">:</span><span class="fcb sc0"> </span><span
+                                class="fcb sc0">AMA</span><span class="fcb sc0">N</span><span
+                                class="fcb sc0">I</span><span class="fcb sc0">,</span><span class="fcb sc0">
+                            </span><span class="fcb sc0">U</span><span class="fcb sc0">SAL</span><span
+                                class="fcb sc0">AMA</span><span class="fcb sc0"> </span><span
+                                class="fcb sc0">N</span><span class="fcb sc0">A</span><span class="fcb sc0">
+                            </span><span class="fcb sc0">MAE</span><span class="fcb sc0">N</span><span
+                                class="fcb sc0">D</span><span class="fcb sc0">EL</span><span
+                                class="fcb sc0">EO</span><span class="fcb sc0"> </span><span
+                                class="fcb sc0">KW</span><span class="fcb sc0">ET</span><span class="fcb sc0">U</span>
+                        </div>
+                        <div class="t m0 x3 h4 y5 ff4 fs1 fc1 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t m1 x4 h4 y5 ff4 fs1 fc1 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t m2 x2 h5 y6 ff4 fs2 fc2 sc0 lsa ws2"><span class="fcb sc0">P</span><span
+                                class="fcb sc0">ro</span><span class="_ _0"></span><span class="fcb sc0">j</span><span
+                                class="fcb sc0">e</span><span class="fcb sc0">t</span><span class="_ _0"></span><span
+                                class="fc0 wsc"><span class="fcb sc0"> </span><span class="fcb sc0">:</span><span
+                                    class="fcb sc0"> </span><span class="_ _1"></span><span
+                                    class="fcb sc0">R</span><span class="fcb sc0">e</span><span
+                                    class="_ _0"></span><span class="fcb sc0">n</span><span class="fcb sc0">f</span><span
+                                    class="fcb sc0">o</span><span class="_ _0"></span><span
+                                    class="fcb sc0">r</span><span class="fcb sc0">c</span><span class="_ _0"></span><span
+                                    class="fcb sc0">e</span><span class="fcb sc0">m</span><span class="fcb sc0">e</span><span
+                                    class="_ _0"></span><span class="fcb sc0">n</span><span class="_ _0"></span><span
+                                    class="fcb sc0">t</span><span class="fcb sc0"> </span><span
+                                    class="_ _1"></span><span class="fcb sc0">d</span><span class="fcb sc0">e</span><span
+                                    class="fcb sc0">s</span><span class="_ _0"></span><span
+                                    class="fcb sc0"> </span><span class="_ _1"></span><span
+                                    class="fcb sc0">M</span><span class="fcb sc0">e</span><span class="fcb sc0">s</span><span
+                                    class="_ _0"></span><span class="fcb sc0">u</span><span class="fcb sc0">r</span><span
+                                    class="_ _0"></span><span class="fcb sc0">e</span><span class="fcb sc0">s</span><span
+                                    class="_ _0"></span><span class="fcb sc0">
+                                </span><span class="_ _1"></span><span class="fcb sc0">S</span><span
+                                    class="fcb sc0">é</span><span class="fcb sc0">c</span><span class="fcb sc0">u</span><span
+                                    class="_ _0"></span><span class="fcb sc0">ri</span><span class="fcb sc0">t</span><span
+                                    class="_ _0"></span><span class="fcb sc0">ai</span><span
+                                    class="fcb sc0">r</span><span class="_ _0"></span><span
+                                    class="fcb sc0">e</span><span class="fcb sc0">s</span><span class="fcb sc0">
+                                </span><span class="_ _1"></span><span class="fcb sc0">e</span><span class="fcb sc0">t</span><span
+                                    class="_ _0"></span><span class="fcb sc0">
+                                </span><span class="_ _1"></span><span class="fcb sc0">d</span><span class="fcb sc0">e</span><span
+                                    class="fcb sc0"> </span><span class="_ _1"></span><span
+                                    class="fcb sc0">s</span><span class="fcb sc0">u</span><span class="fcb sc0">i</span><span
+                                    class="fcb sc0">v</span><span class="fcb sc0">i</span><span class="_ _0"></span><span
+                                    class="fcb sc0"> </span><span class="_ _1"></span><span
+                                    class="fcb sc0">d</span><span class="fcb sc0">e</span><span class="fcb sc0">s</span><span
+                                    class="fcb sc0">
+                                </span><span class="_ _1"></span><span class="fcb sc0">F</span><span
+                                    class="fcb sc0">l</span><span class="_ _0"></span><span
+                                    class="fcb sc0">u</span><span class="fcb sc0">x</span><span class="fcb sc0">
+                                </span><span class="_ _1"></span><span class="fcb sc0">(</span><span
+                                    class="fcb sc0">M</span><span class="fcb sc0">o</span><span
+                                    class="_ _0"></span><span class="fcb sc0">u</span><span class="fcb sc0">v</span><span
+                                    class="_ _0"></span><span class="fcb sc0">e</span><span class="fcb sc0">m</span><span
+                                    class="_ _0"></span><span class="fcb sc0">e</span><span class="fcb sc0">n</span><span
+                                    class="fcb sc0">t</span><span class="_ _0"></span><span
+                                    class="fcb sc0">s</span><span class="fcb sc0">
+                                </span><span class="_ _1"></span><span class="fcb sc0">d</span><span class="fcb sc0">e</span><span
+                                    class="_ _1"></span><span class="fcb sc0">s</span><span class="fcb sc0"> </span><span
+                                    class="_ _1"></span><span class="fcb sc0">P</span><span class="fcb sc0">o</span><span
+                                    class="fcb sc0">p</span><span class="_ _0"></span><span
+                                    class="fcb sc0">u</span><span class="fcb sc0">l</span><span class="_ _0"></span><span
+                                    class="fcb sc0">a</span><span class="fcb sc0">t</span><span class="fcb sc0">i</span><span
+                                    class="_ _0"></span><span class="fcb sc0">o</span><span class="_ _0"></span><span
+                                    class="fcb sc0">n</span><span class="fcb sc0">s</span><span class="_ _0"></span><span
+                                    class="fcb sc0"> </span><span class="_ _1"></span><span
+                                    class="fcb sc0">a</span><span class="fcb sc0">v</span><span class="fcb sc0">e</span><span
+                                    class="fcb sc0">c</span><span class="fcb sc0">
+                                </span><span class="_ _1"></span><span class="ff5 ws2"><span
+                                        class="fcb sc0">l</span><span class="fcb sc0">'</span><span
+                                        class="fcb sc0">O</span><span class="_ _0"></span></span><span
+                                    class="fcb sc0">p</span><span class="_ _0"></span><span
+                                    class="fcb sc0">é</span><span class="fcb sc0">r</span><span
+                                    class="fcb sc0">a</span><span class="_ _0"></span><span
+                                    class="fcb sc0">t</span><span class="fcb sc0">i</span><span
+                                    class="fcb sc0">o</span><span class="_ _0"></span><span
+                                    class="fcb sc0">n</span><span class="fcb sc0"> </span><span
+                                    class="_ _1"></span><span class="fcb sc0">T</span><span class="fcb sc0">U</span><span
+                                    class="fcb sc0">J</span><span class="_ _0"></span><span
+                                    class="fcb sc0">I</span><span class="fcb sc0">K</span><span class="_ _0"></span><span
+                                    class="fcb sc0">I</span><span class="fcb sc0">N</span><span class="_ _0"></span><span
+                                    class="fcb sc0">G</span><span class="fcb sc0">E</span><span class="fcb sc0"> </span></span></div>
+                        <div class="t m2 x2 h5 y7 ff4 fs2 fc0 sc0 lsa wsc"><span class="fcb sc0">W</span><span
+                                class="fcb sc0">E</span><span class="_ _0"></span><span class="fcb sc0">N</span><span
+                                class="fcb sc0">Y</span><span class="_ _0"></span><span class="fcb sc0">E</span><span
+                                class="fcb sc0">W</span><span class="_ _0"></span><span class="fcb sc0">E</span><span
+                                class="fcb sc0"> </span><span class="_ _0"></span><span class="fcb sc0">d</span><span
+                                class="fcb sc0">a</span><span class="fcb sc0">n</span><span class="_ _0"></span><span
+                                class="fcb sc0">s</span><span class="fcb sc0"> </span><span class="fcb sc0">la</span><span
+                                class="_ _0"></span><span class="fcb sc0"> </span><span class="_ _0"></span><span
+                                class="ff5"><span class="fcb sc0">Vi</span><span class="fcb sc0">l</span><span
+                                    class="_ _0"></span><span class="fcb sc0">l</span><span class="fcb sc0">e</span><span
+                                    class="_ _0"></span><span class="fcb sc0"> </span><span class="fcb sc0">d</span><span
+                                    class="fcb sc0">'</span><span class="fcb sc0">U</span><span class="_ _0"></span><span
+                                    class="fcb sc0">v</span><span class="fcb sc0">i</span><span class="_ _0"></span><span
+                                    class="fcb sc0">r</span><span class="_ _0"></span><span
+                                    class="fcb sc0">a</span><span class="fcb sc0">/</span><span
+                                    class="_ _0"></span></span><span class="fcb sc0">P</span><span
+                                class="_ _0"></span><span class="fcb sc0">r</span><span class="fcb sc0">o</span><span
+                                class="_ _0"></span><span class="fcb sc0">v</span><span class="fcb sc0">i</span><span
+                                class="fcb sc0">n</span><span class="fcb sc0">c</span><span class="_ _0"></span><span
+                                class="fcb sc0">e</span><span class="fcb sc0"> </span><span class="fcb sc0">d</span><span
+                                class="_ _0"></span><span class="fcb sc0">u</span><span class="fcb sc0"> </span><span
+                                class="_ _0"></span><span class="lsc ws3"><span
+                                    class="fcb sc0">Su</span></span><span class="fcb sc0">d</span><span class="fcb sc0">-</span><span
+                                class="_ _0"></span><span class="fcb sc0">Ki</span><span class="fcb sc0">v</span><span
+                                class="fcb sc0">u</span><span class="_ _0"></span><span class="fcb sc0"> </span><span
+                                class="fcb sc0">e</span><span class="_ _0"></span><span class="fcb sc0">n</span><span
+                                class="fcb sc0"> </span></div>
+                        <div class="t m3 x5 h6 y7 ff6 fs4 fc3 sc0 lsa wsc"><span class="fcb sc0">R</span><span
+                                class="fcb sc0">D</span><span class="fcb sc0">C</span></div>
+                        <div class="t m2 x6 h5 y7 ff4 fs2 fc0 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t m4 x2 h7 y8 ff6 fs4 fc3 sc0 lsa wsc"><span class="fcb sc0">F</span><span
+                                class="fcb sc0">O</span><span class="fcb sc0">R</span><span
+                                class="fcb sc0">MULA</span><span class="fcb sc0">IRE </span><span
+                                class="fcb sc0">D</span><span class="fcb sc0">'</span><span
+                                class="fcb sc0">ID</span><span class="fcb sc0">EN</span><span
+                                class="fcb sc0">TIFI</span><span class="fcb sc0">C</span><span
+                                class="fcb sc0">A</span><span class="fcb sc0">TION</span><span class="fcb sc0">
+                            </span><span class="fcb sc0">D</span><span class="fcb sc0">E </span><span
+                                class="fcb sc0">L'</span><span class="fcb sc0">H</span><span
+                                class="fcb sc0">O</span><span class="fcb sc0">TEL,</span><span class="fcb sc0">
+                            </span><span class="ff7"><span class="fcb sc0">B</span><span class="fcb sc0">A</span><span
+                                    class="fcb sc0">R</span><span class="fcb sc0">,</span><span class="fcb sc0">
+                                    R</span><span class="fcb sc0">ES</span><span class="fcb sc0">TA</span><span
+                                    class="fcb sc0">U</span><span class="fcb sc0">R</span><span
+                                    class="fcb sc0">A</span><span class="fcb sc0">N</span><span
+                                    class="fcb sc0">T</span><span class="fcb sc0"> </span><span class="fcb sc0">ET
+                                    S</span><span class="fcb sc0">IMILA</span><span class="fcb sc0">IR</span><span
+                                    class="fcb sc0">E</span><span class="ls0"><span class="fcb sc0"> </span><span
+                                        class="ls1"><span class="fcb sc0"> </span></span><span class="fcb sc0">
+                                    </span></span></span></div>
+                        <div class="t m0 x7 h8 y8 ff3 fs2 fc3 sc0 lsa wsc"><span class="fcb sc0">P</span><span
+                                class="fcb sc0">a</span><span class="fcb sc0">g</span><span class="fcb sc0">e</span><span
+                                class="fcb sc0"> </span><span class="ff8 ls2"><span
+                                    class="fcb sc0">1</span></span><span class="fcb sc0"> </span><span
+                                class="fcb sc0">s</span><span class="fcb sc0">u</span><span class="fcb sc0">r
+                            </span><span class="ff8"><span class="fcb sc0">1</span></span></div>
+                        <div class="t m5 x8 h9 y8 ff4 fs5 fc3 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t m6 x9 ha y9 ff9 fs6 fc4 sc1 lsa wsc">R<span class="_ _0"></span>é<span
+                                class="_ _0"></span>p<span class="_ _0"></span>ub<span class="_ _0"></span>li<span
+                                class="_ _0"></span>q<span class="_ _0"></span>ue<span class="_ _0"></span> D<span
+                                class="_ _1"></span>ém<span class="_ _0"></span>o<span class="_ _0"></span>c<span
+                                class="_ _0"></span>ra<span class="_ _0"></span>t<span class="_ _0"></span>iq<span
+                                class="_ _0"></span>ue<span class="_ _0"></span> d<span class="_ _0"></span>u <span
+                                class="_ _0"></span>C<span class="_ _0"></span>o<span class="_ _0"></span>n<span
+                                class="_ _0"></span>g<span class="_ _0"></span>o</div>
+                        <div class="t m0 xa h2 y9 ff1 fs0 fc0 sc0 lsa wsc"> </div>
+                        <div class="t m6 xb ha y9 ff9 fs6 fc4 sc1 lsa wsc"> </div>
+                        <div class="t m7 xc hb ya ff7 fs0 fc4 sc0 lsa wsc">PROVINCE <span class="_ _0"></span>DU
+                            TANGA<span class="_ _0"></span>NYIKA<span class="_ _0"></span> </div>
+                        <div class="t m8 xd hc yb ff9 fs7 fc5 sc2 lsa wsc">M<span class="_ _0"></span>i<span
+                                class="_ _0"></span>ni<span class="_ _0"></span>st<span class="_ _0"></span>èr<span
+                                class="_ _0"></span>e P<span class="_ _1"></span>rov<span class="_ _0"></span>in<span
+                                class="_ _0"></span>cia<span class="_ _0"></span>l <span class="_ _0"></span>d<span
+                                class="_ _0"></span>u <span class="_ _0"></span>T<span class="_ _0"></span>ra<span
+                                class="_ _0"></span>ns<span class="_ _0"></span>po<span class="_ _0"></span>rt<span
+                                class="_ _0"></span> et <span class="_ _0"></span>V<span class="_ _0"></span>o<span
+                                class="_ _0"></span>ies<span class="_ _0"></span> d<span class="_ _0"></span>e <span
+                                class="_ _0"></span>C<span class="_ _0"></span>o<span class="_ _0"></span>m<span
+                                class="_ _0"></span>m<span class="_ _0"></span>u<span class="_ _0"></span>ni<span
+                                class="_ _0"></span>ca<span class="_ _0"></span>tio<span class="_ _0"></span>n</div>
+                        <div class="t m9 xe hd yb ff9 fs8 fc1 sc0 lsa wsc"> </div>
+                        <div class="t m7 xf hb yc ff7 fs0 fc4 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t m7 x10 hb yd ff7 fs0 fc6 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t m0 x10 he ye ffa fs3 fc0 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t m0 x10 hf yf ffa fs5 fc0 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t ma x10 h10 y10 ff7 fs3 fc0 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t mb x11 h11 y11 ffb fs6 fc0 sc3 lsa wsc">Co<span class="_ _0"></span>m<span
+                                class="_ _0"></span>m<span class="_ _1"></span>issa<span class="_ _0"></span>r<span
+                                class="_ _0"></span>iat <span class="_ _0"></span>M<span class="_ _0"></span>a<span
+                                class="_ _0"></span>ri<span class="_ _0"></span>tim<span class="_ _0"></span>e<span
+                                class="_ _1"></span> </div>
+                        <div class="t mc x10 h12 y12 ff7 fs9 fc0 sc0 lsa wsc"> </div>
+                        <div class="t m8 x12 h13 y13 ffc fs7 fc7 sc4 lsa wsc">FIC<span class="_ _0"></span>HE<span
+                                class="_ _0"></span> D<span class="_ _0"></span>'IDE<span class="_ _0"></span>NT<span
+                                class="_ _0"></span>IFI<span class="_ _0"></span>CA<span class="_ _0"></span>T<span
+                                class="_ _0"></span>ION <span class="_ _1"></span><span class="ffd">DE<span
+                                    class="_ _0"></span>S UN<span class="_ _0"></span>IT<span class="_ _0"></span>ES
+                                <span class="_ _0"></span>FL<span class="_ _0"></span>OTT<span
+                                class="_ _0"></span>AN<span class="_ _0"></span>TE<span class="_ _0"></span>S<span
+                                class="_ _0"></span> <span class="_ _0"></span>EN<span class="_ _0"></span> AC<span
+                                class="_ _0"></span>IE<span class="_ _0"></span><span class="fcb sc0">R</span><span
+                                class="fcb sc0"> </span></span>
+                        </div>
+                        <div class="t m0 x13 h14 y14 ffe fsa fc8 sc0 lsa wsc">
+                            **************************************<span class="fcb sc0"> </span></div>
+                        <div class="t md x14 h15 y15 fff fs7 fc7 sc0 lsa wsc"> </div>
+                        <div class="t m0 x1 h16 y16 ff1 fsb fc0 sc0 lsa wsc"> </div>
+                        <div class="t m0 x1 h17 y17 ff1 fs4 fc0 sc0 lsa wsc"> </div>
+                    </div>
+                    <div class="c x15 y18 w3 h18">
+                        <div class="t me x16 h19 y19 ff10 fsc fc9 sc0 lsa wsc">RENSEIGNEMENT RE<span
+                                class="_ _0"></span>LATIVE <span class="_ _0"></span><span class="ff11">A L'ARMA<span
+                                    class="_ _0"></span>TEUR </span> </div>
+                        <div class="t me x16 h19 y1a ff10 fsc fc7 sc0 lsa wsc">Noms <span class="_ _2"> </span><span
+                                class="ff11 ws5">:………………………<span class="_ _0"></span>………………<span
+                                    class="_ _0"></span>……………<span class="_ _0"></span>…………….…<span
+                                    class="_ _0"></span>…Sexe………<span class="_ _0"></span></span><span class="fcb sc0">
+                            </span></div>
+                        <div class="t me x16 h19 y1b ff11 fsc fc7 sc0 lsa wsc">Lieu et date de Na<span
+                                class="_ _0"></span>issance :…………<span class="_ _0"></span>…<span
+                                class="ls4 ws6">……</span><span class="ws5">………L<span
+                                    class="_ _0"></span>e…….……../……..<span class="_ _0"></span>……../………<span
+                                    class="_ _0"></span>……</span><span class="ff10">
+                            </span></div>
+                        <div class="t me x16 h19 y1c ff10 fsc fc7 sc0 lsa wsc">Noms du Père <span class="_ _0"></span>
+                            <span class="_ _3"> </span><span class="ff11 ws5">:………..…..………<span
+                                class="_ _0"></span>………………………<span class="_ _0"></span>….……………<span
+                                class="_ _0"></span>………………………<span class="_ _1"></span></span><span class="fcb sc0">
+                            </span>
+                        </div>
+                        <div class="t me x16 h19 y1d ff10 fsc fc7 sc0 lsa wsc">Noms <span class="_ _4"></span>de la
+                            <span class="_ _4"></span>Mère <span class="_ _4"></span> <span class="_ _4"></span><span
+                                class="ff11 ls3 ws7">:………….…………<span class="_ _4"></span>………………………………<span
+                                    class="_ _4"></span>…………………<span class="_ _4"></span>……………<span
+                                    class="ff10 lsa wsc"><span class="fcb sc0"> </span></span></span>
+                        </div>
+                        <div class="t me x16 h19 y1e ff10 fsc fc7 sc0 lsa wsc">Etat-civil <span class="_ _0"></span>
+                            <span class="_ _5"> </span><span class="ff11 ws5">:……………………<span
+                                class="_ _0"></span>………………<span class="_ _0"></span></span>Nationalité <span
+                                class="ff11 ws5">…<span class="_ _0"></span>……..……………<span
+                                class="_ _0"></span>...……..</span>
+                        </div>
+                        <div class="t me x16 h19 y1f ff10 fsc fc7 sc0 lsa wsc">Contact <span class="ff11 ls3">: <span
+                                class="_ _4"></span>………………………<span class="_ _4"></span>………………….<span
+                                class="_ _4"></span>.<span class="ff10 lsa ws5">..E-</span><span class="lsa">ma<span
+                                class="_ _0"></span>il <span class="_ _4"></span>:……………<span
+                                class="_ _0"></span>……………………<span class="_ _0"></span>………<span
+                                class="_ _0"></span><span class="ff10"><span class="fcb sc0">
+                                        </span></span></span></span></div>
+                        <div class="t me x16 h19 y20 ff11 fsc fc7 sc0 lsa wsc">Adresse de <span
+                                class="_ _4"></span>résidence : …………………………….<span class="_ _0"></span>………………<span
+                                class="_ _0"></span>…………………<span class="_ _0"></span>………………<span
+                                class="_ _0"></span><span class="ff10"><span class="fcb sc0"> </span></span></div>
+                        <div class="t m9 x16 h1a y21 ff10 fs9 fc1 sc0 lsa wsc"> </div>
+                        <div class="t me x16 h19 y22 ff10 fsc fc9 sc0 lsa wsc">INFORMATION RE<span
+                                class="_ _0"></span>LATIVE A L<span class="_ _0"></span><span class="ff11">'UNITE
+                                FLOTTAN<span class="_ _0"></span>TE </span> </div>
+                        <div class="t me x16 h19 y23 ff10 fsc fc7 sc0 lsa wsc">Type <span
+                            class="ff11 ws5">d'embarcat<span class="_ _0"></span>ion</span> :<span
+                            class="ff11 ws5">…………<span class="_ _0"></span>……………</span>Mod<span
+                            class="_ _0"></span>èle de F<span class="_ _0"></span>abrication :<span
+                            class="ff11 ws5">…<span class="_ _0"></span>………<span class="ls4 ws6">……</span>…………<span
+                                class="fcb sc0">…</span><span class="_ _0"></span></span><span class="fcb sc0">
+                            </span></div>
+                        <div class="t me x16 h19 y24 ff10 fsc fc7 sc0 lsa wsc">Dénomination :<span
+                            class="_ _0"></span><span class="ff11 ws5">………………<span class="ls4 ws6">………<span
+                                    class="ls5">…</span>………</span><span class="wsc">…Date de </span></span>Fabr<span
+                            class="_ _0"></span>ication :<span class="ff11 ls4 ws6">………</span><span
+                            class="ls6">/</span><span class="ff11 ws5">………</span><span class="ls6">/</span><span
+                            class="ff11 ws5">…<span class="ls4 ws6">……</span></span><span class="fcb sc0"> </span>
+                        </div>
+                        <div class="t me x16 h19 y25 ff11 fsc fc7 sc0 lsa wsc">N° d'Id<span class="ff10">entificat<span
+                                class="_ _0"></span>ion :</span>………………<span class="_ _0"></span>…………<span
+                            class="_ _0"></span>……N° d'Immatricu<span class="_ _0"></span>lation<span class="ff10">
+                            :
+                        </span><span class="ls3 ws7">……………<span class="lsd ws8">……<span
+                                class="ls7">…</span></span></span><span class="ff10"><span class="fcb sc0">
+                            </span></span></div>
+                        <div class="t me x16 h19 y26 ff10 fsc fc7 sc0 lsa wsc">Lieu et date <span class="ff11">d'<span
+                                class="_ _0"></span>Immatriculation <span class="_ _0"></span></span>: <span
+                            class="ff11">………………<span class="_ _0"></span>…………… Le…<span
+                                class="_ _0"></span>………</span><span class="ls6">/</span><span
+                            class="ff11 ws5">……<span class="_ _0"></span>……/…………</span><span class="fcb sc0">
+                            </span></div>
+                        <div class="t me x16 h19 y27 ff10 fsc fc7 sc0 lsa wsc">Capacité <span
+                            class="ff11 ws5">d'embar<span class="_ _0"></span>cation</span> <span
+                            class="ff11 lse ws9">:…<span class="ls7">…<span
+                                class="ls4 ws6">……………</span></span></span>Li<span class="_ _4"></span>gne de
+                            na<span class="_ _0"></span>vigation <span class="ff11 ws5">:……<span
+                                class="_ _0"></span>……………………<span class="_ _0"></span>…</span> </div>
+                        <div class="t me x16 h19 y28 ff10 fsc fc7 sc0 lsa wsc">Hauteur <span class="ff11">de l'e<span
+                                class="_ _0"></span>mbarcation :……<span class="_ _0"></span>…………<span
+                                class="ls4 ws6">…………</span><span class="ws5">…</span></span> <span
+                            class="ff11 ws5">Longueur<span class="_ _0"></span>…………<span
+                                class="_ _0"></span>………………<span class="_ _0"></span>……</span><span class="fcb sc0">
+                            </span><span class="fcb sc0">
+                            </span></div>
+                        <div class="t me x16 h19 y29 ff11 fsc fc7 sc0 lsa wsc">Largeur <span class="_ _6"></span>: <span
+                            class="_ _6"></span>……………………………<span class="_ _0"></span>………Coul<span
+                            class="_ _0"></span>eur <span class="_ _6"></span>de <span class="_ _7"></span>la <span
+                            class="_ _7"></span>bar<span class="_ _0"></span>que <span
+                            class="_ _7"></span>:…………<span class="_ _0"></span><span class="ls4 ws6">……</span><span
+                            class="ws5">……………<span class="_ _0"></span>…</span></div>
+                        <div class="t m0 x17 h2 y29 ff1 fs0 fc0 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t me x18 h19 y29 ff10 fsc fc7 sc0 lsa wsc"><span class="fcb sc0"> </span></div>
+                        <div class="t me x16 h19 y2a ff10 fsc fc7 sc0 lsa wsc">Type de <span class="ff11">moteur : <span
+                                class="_ _0"></span>………………<span class="_ _0"></span>………<span
+                                class="ls4 ws6">………………</span></span><span class="lsf wsa">Ma</span><span
+                            class="ff11 ws5">rque……<span class="_ _0"></span>………….…………<span
+                                class="_ _0"></span>…………</span><span class="fcb sc0"> </span></div>
+                        <div class="t me x16 h19 y2b ff11 fsc fc7 sc0 ls8">N<span class="ff11 lsa wsc">ombre <span
+                                class="_ _4"></span>d'équipage<span class="ff10"> </span><span class="ls3">:<span
+                                class="_ _4"></span> <span class="_ _6"></span>………………………<span class="ff10 lsa">
+                                    <span class="_ _6"></span>No<span class="_ _0"></span>mbre <span
+                                    class="_ _4"></span>de <span class="_ _6"></span>Capita<span
+                                    class="_ _0"></span>ine <span class="_ _4"></span><span class="ff11">: <span
+                                    class="_ _6"></span>…<span class="_ _0"></span>……………………<span
+                                    class="_ _0"></span><span class="ff10">
+                                    </span></span></span></span></span>
+                        </div>
+                        <div class="t me x16 h19 y2c ff10 fsc fc7 sc0 lsa wsc">Usage <span class="ls10">:
+                            </span>Transport
+                            de P<span class="_ _0"></span>ersonne <span class="_ _0"></span>Marchandise <span
+                            class="_ _0"></span>Pêche Pr<span class="_ _0"></span>ivé Autr<span
+                            class="_ _0"></span>e
+                        </div>
+                        <div class="t mf x16 h1b y2d ff10 fsd fc7 sc0 lsa wsc"> </div>
+                        <div class="t me x16 h19 y2e ff10 fsc fc1 sc0 lsa wsc">INFORMATION RE<span
+                                class="_ _0"></span>LATIVE <span class="_ _0"></span><span class="ff11">A L'</span><span
+                                class="ws5">EQUIPAGE<span class="_ _0"></span></span><span class="fc7"> </span></div>
+                        <div class="t me x16 h19 y2f ff10 fsc fc7 sc0 ls8">N<span class="ff11 lsa wsc">ombre <span
+                                class="_ _4"></span>d'équipage<span class="ff10"> </span><span class="ls3">:<span
+                                class="_ _4"></span> <span class="_ _6"></span>………………………<span class="ff10 lsa">
+                                    <span class="_ _6"></span>No<span class="_ _0"></span>mbre <span
+                                    class="_ _4"></span>de <span class="_ _6"></span>Capita<span
+                                    class="_ _0"></span>ine <span class="_ _4"></span><span class="ff11">: <span
+                                    class="_ _6"></span>…<span class="_ _0"></span>……………………<span
+                                    class="_ _0"></span><span class="ff10">
+                                    </span></span></span></span></span>
+                        </div>
+                        <div class="t me x16 h19 y30 ff10 fsc fc7 sc0 lsa wsc">Lieu <span class="ff11">et date d'<span
+                                class="_ _0"></span>i</span>dentification <span class="ff11">: <span
+                                class="_ _0"></span>………………<span class="_ _0"></span>…………, Le……<span
+                                class="_ _0"></span>……/…………/20…<span class="_ _0"></span>……</span> </div>
+                    </div>
+                    
+                    <div class="c x1a y33 w5 h1e">
+                        <div class="t m11 x1b h1f y34 ff14 fs4 fc7 sc0 lsa wsc">Visa<span class="_ _0"></span> d<span
+                            class="_ _0"></span>u pr<span class="_ _0"></span>opr<span class="_ _0"></span>iét<span
+                            class="_ _0"></span>aire<span class="_ _0"></span> o<span class="_ _0"></span>u s<span
+                            <div class="t m5 x1f h21 y39 ff10 fs1 fc7 sc0 lsa wsc">(No<span
+                                class="_ _0"></span>ms<span class="_ _0"></span>, Si<span class="_ _0"></span>g<span
+                                class="_ _0"></span>natu<span class="_ _0"></span>re<span class="_ _0"></span> et
+                                <span class="_ _0"></span>Sce<span class="_ _0"></span>au<span class="_ _0"></span>
+                                d<span class="_ _0"></span>u Co<span class="_ _0"></span>mm<span
+                                class="_ _0"></span>is<span class="_ _0"></span>sair<span class="_ _0"></span>e
+                                o<span class="_ _0"></span>u s<span class="_ _0"></span>on d<span
+                                class="_ _0"></span>él<span class="_ _0"></span>g<span class="_ _0"></span>ué<span
+                                class="_ _0"></span>)<span class="_ _0"></span> </div>
+                    </div>
+                </div>
+                <div class="pi" data-data='{"ctm":[1.000000,0.000000,0.000000,1.000000,0.000000,0.000000]}'></div>
+            </div>
+    </main>
+
+    <div
+        class="loading-indicator fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm pointer-events-none transition-opacity duration-300 opacity-0 active:opacity-100">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-sidebarDark border-t-transparent"></div>
+    </div>
+</body>
+
+</html>
