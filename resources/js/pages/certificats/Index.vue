@@ -2,7 +2,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import {
-    Search, FileCheck, Car, Anchor, User,
+    Search, FileCheck, FileText, Car, Anchor, User,
     Calendar, ShieldCheck, Printer, Download, Eye
 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -81,19 +81,41 @@ defineOptions({
 
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm dark:bg-slate-950">
-                    <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">{{ __('certificats.total_label') }}
-                    </p>
-                    <p class="text-3xl font-black text-slate-900 dark:text-slate-100">{{ stats.total }}</p>
+                <div class="relative overflow-hidden p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-transparent dark:from-slate-800/50" />
+                    <div class="relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="size-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500">
+                                <FileCheck class="size-5" />
+                            </div>
+                        </div>
+                        <p class="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider">{{ __('certificats.total_label') }}</p>
+                        <p class="text-3xl font-black text-slate-900 dark:text-white mt-0.5">{{ stats.total }}</p>
+                    </div>
                 </div>
-                <div class="p-6 rounded-xl bg-white border border-blue-100 shadow-sm dark:bg-slate-950">
-                    <p class="text-[10px] font-black uppercase text-rdc-blue tracking-widest mb-1">{{ __('certificats.id_label') }}</p>
-                    <p class="text-3xl font-black text-rdc-blue">{{ stats.identification }}</p>
+                <div class="relative overflow-hidden p-6 rounded-xl bg-white dark:bg-slate-900 border border-blue-100 dark:border-rdc-blue/20 shadow-sm">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent dark:from-rdc-blue/[0.06]" />
+                    <div class="relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="size-10 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue">
+                                <FileText class="size-5" />
+                            </div>
+                        </div>
+                        <p class="text-[10px] font-bold uppercase text-rdc-blue tracking-wider">{{ __('certificats.id_label') }}</p>
+                        <p class="text-3xl font-black text-rdc-blue mt-0.5">{{ stats.identification }}</p>
+                    </div>
                 </div>
-                <div class="p-6 rounded-xl bg-white border border-red-100 shadow-sm dark:bg-slate-950">
-                    <p class="text-[10px] font-black uppercase text-rdc-red tracking-widest mb-1">{{ __('certificats.possession_label') }}
-                    </p>
-                    <p class="text-3xl font-black text-rdc-red">{{ stats.possession }}</p>
+                <div class="relative overflow-hidden p-6 rounded-xl bg-white dark:bg-slate-900 border border-red-100 dark:border-rdc-red/20 shadow-sm">
+                    <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-transparent dark:from-rdc-red/[0.06]" />
+                    <div class="relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="size-10 rounded-lg bg-rdc-red/10 dark:bg-rdc-red/20 flex items-center justify-center text-rdc-red">
+                                <ShieldCheck class="size-5" />
+                            </div>
+                        </div>
+                        <p class="text-[10px] font-bold uppercase text-rdc-red tracking-wider">{{ __('certificats.possession_label') }}</p>
+                        <p class="text-3xl font-black text-rdc-red mt-0.5">{{ stats.possession }}</p>
+                    </div>
                 </div>
             </div>
 

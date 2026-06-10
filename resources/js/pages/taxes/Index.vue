@@ -4,7 +4,8 @@ import { ref, computed } from 'vue';
 import {
     Plus, Search, Trash2, Pencil, Globe, Settings,
     DollarSign, Users, BarChart3, Filter, Eye, Zap,
-    ArrowUp, ArrowDown, ArrowUpDown
+    ArrowUp, ArrowDown, ArrowUpDown, Activity, Building2,
+    Calendar, MapPin, Tag
 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -511,52 +512,81 @@ defineOptions({
             <DialogHeader>
                 <DialogTitle class="text-2xl font-black">{{ __('taxes.details_title') }}</DialogTitle>
             </DialogHeader>
-            <div v-if="selectedTaxe" class="space-y-6">
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <Label class="text-xs font-bold text-slate-400 uppercase">{{ __('taxes.label') }}</Label>
-                        <p class="text-lg font-black text-slate-900 dark:text-slate-100 mt-1">{{ selectedTaxe.label
-                        }}</p>
+            <div v-if="selectedTaxe" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                        <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                            <Tag class="size-4" />
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('taxes.label') }}</p>
+                            <p class="text-base font-black text-slate-900 dark:text-white mt-0.5">{{ selectedTaxe.label }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <Label class="text-xs font-bold text-slate-400 uppercase">{{ __('taxes.target') }}</Label>
-                        <p class="text-lg font-bold text-slate-700 dark:text-slate-300 mt-1">{{
-                            selectedTaxe.target }}</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <Label class="text-xs font-bold text-slate-400 uppercase">{{ __('taxes.beneficiary') }}</Label>
-                        <p class="text-lg font-bold text-slate-700 dark:text-slate-300 mt-1">{{
-                            selectedTaxe.beneficiary }}</p>
-                    </div>
-                    <div>
-                        <Label class="text-xs font-bold text-slate-400 uppercase">{{ __('taxes.amount') }}</Label>
-                        <p class="text-lg font-black text-rdc-blue mt-1">{{ Number(selectedTaxe.amount).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                        }} {{ selectedTaxe.currency }}</p>
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                        <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                            <Users class="size-4" />
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('taxes.target') }}</p>
+                            <p class="text-base font-bold text-slate-700 dark:text-slate-300 mt-0.5">{{ selectedTaxe.target }}</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <Label class="text-xs font-bold text-slate-400 uppercase">{{ __('taxes.frequency') }}</Label>
-                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300 mt-1">{{
-                            selectedTaxe.frequency }}</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                        <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                            <Building2 class="size-4" />
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('taxes.beneficiary') }}</p>
+                            <p class="text-base font-bold text-slate-700 dark:text-slate-300 mt-0.5">{{ selectedTaxe.beneficiary }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <Label class="text-xs font-bold text-slate-400 uppercase">{{ __('taxes.sector') }}</Label>
-                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300 mt-1 uppercase">{{
-                            selectedTaxe.sector || __('taxes.all_sectors') }}</p>
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                        <div class="size-9 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
+                            <DollarSign class="size-4" />
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('taxes.amount') }}</p>
+                            <p class="text-base font-black text-rdc-blue mt-0.5">{{ Number(selectedTaxe.amount).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} {{ selectedTaxe.currency }}</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <Label class="text-xs font-bold text-slate-400 uppercase">{{ __('taxes.scope_province') }}</Label>
-                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300 mt-1">
-                            {{ selectedTaxe.province?.name || __('taxes.national_taxe') }}
-                        </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                        <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                            <Calendar class="size-4" />
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('taxes.frequency') }}</p>
+                            <p class="text-sm font-bold text-slate-700 dark:text-slate-300 mt-0.5">{{ selectedTaxe.frequency }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                        <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                            <Activity class="size-4" />
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('taxes.sector') }}</p>
+                            <p class="text-sm font-bold text-slate-700 dark:text-slate-300 mt-0.5 uppercase">{{ selectedTaxe.sector || __('taxes.all_sectors') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                        <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                            <MapPin class="size-4" />
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('taxes.scope_province') }}</p>
+                            <p class="text-sm font-bold text-slate-700 dark:text-slate-300 mt-0.5">
+                                {{ selectedTaxe.province?.name || __('taxes.national_taxe') }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 

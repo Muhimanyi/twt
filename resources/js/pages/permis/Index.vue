@@ -3,7 +3,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import {
     Search, CreditCard, User, Calendar, ShieldCheck,
-    ChevronRight, Printer, Download, Eye, Globe
+    ChevronRight, Printer, Download, Eye, Globe, AlertTriangle
 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -66,18 +66,41 @@ defineOptions({
 
             <!-- Stats Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="p-6 rounded-xl bg-white border border-slate-200 shadow-sm dark:bg-slate-950">
-                    <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">{{ __('permis.total_label') }}</p>
-                    <p class="text-3xl font-black text-slate-900 dark:text-slate-100">{{ stats.total }}</p>
+                <div class="relative overflow-hidden p-6 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-transparent dark:from-slate-800/50" />
+                    <div class="relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="size-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500">
+                                <CreditCard class="size-5" />
+                            </div>
+                        </div>
+                        <p class="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider">{{ __('permis.total_label') }}</p>
+                        <p class="text-3xl font-black text-slate-900 dark:text-white mt-0.5">{{ stats.total }}</p>
+                    </div>
                 </div>
-                <div class="p-6 rounded-xl bg-white border border-green-100 shadow-sm dark:bg-slate-950">
-                    <p class="text-[10px] font-black uppercase text-green-500 tracking-widest mb-1">{{ __('permis.valid_label') }}</p>
-                    <p class="text-3xl font-black text-green-600">{{ stats.active }}</p>
+                <div class="relative overflow-hidden p-6 rounded-xl bg-white dark:bg-slate-900 border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-transparent dark:from-emerald-500/[0.06]" />
+                    <div class="relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="size-10 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                                <ShieldCheck class="size-5" />
+                            </div>
+                        </div>
+                        <p class="text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400 tracking-wider">{{ __('permis.valid_label') }}</p>
+                        <p class="text-3xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">{{ stats.active }}</p>
+                    </div>
                 </div>
-                <div class="p-6 rounded-xl bg-white border border-red-100 shadow-sm dark:bg-slate-950">
-                    <p class="text-[10px] font-black uppercase text-red-500 tracking-widest mb-1">{{ __('permis.expired_label') }}
-                    </p>
-                    <p class="text-3xl font-black text-red-600">{{ stats.expired }}</p>
+                <div class="relative overflow-hidden p-6 rounded-xl bg-white dark:bg-slate-900 border border-red-100 dark:border-rdc-red/20 shadow-sm">
+                    <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-transparent dark:from-rdc-red/[0.06]" />
+                    <div class="relative">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="size-10 rounded-lg bg-rdc-red/10 dark:bg-rdc-red/20 flex items-center justify-center text-rdc-red">
+                                <AlertTriangle class="size-5" />
+                            </div>
+                        </div>
+                        <p class="text-[10px] font-bold uppercase text-rdc-red tracking-wider">{{ __('permis.expired_label') }}</p>
+                        <p class="text-3xl font-black text-rdc-red mt-0.5">{{ stats.expired }}</p>
+                    </div>
                 </div>
             </div>
 

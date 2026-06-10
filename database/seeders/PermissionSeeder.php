@@ -64,6 +64,12 @@ class PermissionSeeder extends Seeder
             ['key' => 'paiements.edit', 'group' => 'Paiements', 'label' => 'Modifier un paiement'],
             ['key' => 'paiements.delete', 'group' => 'Paiements', 'label' => 'Supprimer un paiement'],
             ['key' => 'paiements.print', 'group' => 'Paiements', 'label' => 'Imprimer un reçu'],
+
+            // Annonces
+            ['key' => 'annonces.view', 'group' => 'Annonces', 'label' => 'Voir les annonces'],
+            ['key' => 'annonces.create', 'group' => 'Annonces', 'label' => 'Créer une annonce'],
+            ['key' => 'annonces.edit', 'group' => 'Annonces', 'label' => 'Modifier une annonce'],
+            ['key' => 'annonces.delete', 'group' => 'Annonces', 'label' => 'Supprimer une annonce'],
         ];
 
         foreach ($permissions as $data) {
@@ -94,6 +100,7 @@ class PermissionSeeder extends Seeder
                 'certificats.view',
                 'taxes.view', 'taxes.create', 'taxes.edit',
                 'paiements.view', 'paiements.create', 'paiements.encaisser', 'paiements.edit', 'paiements.print',
+                'annonces.view', 'annonces.create', 'annonces.edit',
             ],
             'secretaire' => [
                 'dashboard.view',
@@ -104,6 +111,7 @@ class PermissionSeeder extends Seeder
                 'certificats.view',
                 'taxes.view',
                 'paiements.view', 'paiements.create', 'paiements.print',
+                'annonces.view',
             ],
             'user' => [
                 'dashboard.view',

@@ -294,22 +294,32 @@ defineOptions({
         </div>
 
         <!-- Sector Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
             <div @click="router.visit('/conducteurs')"
-                class="p-6 rounded-xl border border-slate-200 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800 cursor-pointer hover:border-rdc-blue transition-all"
-                :class="{ 'ring-2 ring-rdc-blue/50 bg-rdc-blue/5': !currentSector }">
-                <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">{{ __('common.total') }}</p>
-                <p class="text-2xl font-black text-slate-900 dark:text-slate-100">{{ stats.total }}</p>
+                class="relative overflow-hidden p-5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-900 shadow-sm cursor-pointer hover:shadow-md hover:border-rdc-blue/40 transition-all duration-300"
+                :class="{ 'ring-2 ring-rdc-blue/40 bg-rdc-blue/[0.03]': !currentSector }">
+                <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-transparent dark:from-slate-800/50" />
+                <div class="relative">
+                    <div class="size-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 mb-3">
+                        <Users class="size-5" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 tracking-wider">{{ __('common.total') }}</p>
+                    <p class="text-2xl font-black text-slate-900 dark:text-white mt-0.5">{{ stats.total }}</p>
+                </div>
             </div>
             <div v-for="sec in sectors" :key="sec.value" @click="router.visit(`/conducteurs/sector/${sec.value}`)"
-                class="p-6 rounded-xl border border-slate-200 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800 cursor-pointer hover:border-rdc-blue transition-all"
-                :class="{ 'ring-2 ring-rdc-blue/50 bg-rdc-blue/5': currentSector === sec.value }">
-                <div class="flex items-center gap-2 mb-1">
-                    <component :is="sec.icon" class="size-3 text-slate-400" />
-                    <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest">{{ sec.label }}</p>
+                class="relative overflow-hidden p-5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-900 shadow-sm cursor-pointer hover:shadow-md hover:border-rdc-blue/40 transition-all duration-300"
+                :class="{ 'ring-2 ring-rdc-blue/40 bg-rdc-blue/[0.03]': currentSector === sec.value }">
+                <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-50/50 dark:to-slate-800/30" />
+                <div class="relative">
+                    <div class="size-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center mb-3"
+                        :class="sec.value === 'routier' ? 'text-rdc-blue' : sec.value === 'lacustre' ? 'text-cyan-500' : sec.value === 'aerien' ? 'text-rdc-yellow' : 'text-rdc-red'">
+                        <component :is="sec.icon" class="size-5" />
+                    </div>
+                    <p class="text-[10px] font-bold uppercase tracking-wider"
+                        :class="sec.value === 'routier' ? 'text-rdc-blue' : sec.value === 'lacustre' ? 'text-cyan-500' : sec.value === 'aerien' ? 'text-rdc-yellow' : 'text-rdc-red'">{{ sec.label }}</p>
+                    <p class="text-2xl font-black text-slate-900 dark:text-white mt-0.5">{{ stats.by_sector[sec.value] || 0 }}</p>
                 </div>
-                <p class="text-2xl font-black text-slate-900 dark:text-slate-100">{{ stats.by_sector[sec.value] || 0
-                }}</p>
             </div>
         </div>
 

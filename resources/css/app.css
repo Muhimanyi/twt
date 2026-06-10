@@ -438,15 +438,25 @@
     color: oklch(0.92 0.01 265);
 }
 
-.tw-dashboard-btn,
-.tw-dashboard-btn:hover,
-.tw-dashboard-btn[data-active="true"],
-.tw-dashboard-btn:active {
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    transform: none !important;
+.tw-dashboard-btn {
+    background: rgb(249, 115, 22) !important;
     color: black !important;
+    border-radius: 9999px !important;
+    font-weight: 700 !important;
+    padding: 1rem 1rem !important;
+    font-size:30px !important;
+}
+
+.tw-dashboard-btn:hover,
+.tw-dashboard-btn:focus,
+.tw-dashboard-btn:active,
+.tw-dashboard-btn:focus-visible,
+.tw-dashboard-btn[data-active="true"],
+.tw-dashboard-btn[data-state="open"]:hover {
+    background: rgb(249, 115, 22) !important;
+    color: black !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .tw-dashboard-btn .tw-sidebar-title {

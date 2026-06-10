@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AnnonceController;
 use App\Http\Controllers\CertificatController;
 use App\Http\Controllers\ConducteurController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebardeurController;
 use App\Http\Controllers\EnginController;
@@ -14,9 +16,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
-Route::inertia('/', 'Welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+Route::get('/', WelcomeController::class)->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])
@@ -86,6 +86,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('paiements/{paiement}', [PaiementController::class, 'show'])->name('paiements.show')->middleware('permission:paiements.view');
     Route::delete('paiements/{paiement}', [PaiementController::class, 'destroy'])->name('paiements.destroy')->middleware('permission:paiements.delete');
     Route::get('/paiements/{paiement}/print', [PaiementController::class, 'print'])->name('paiements.print')->middleware('permission:paiements.view');
+
+    // Annonces Routes
+    Route::get('annonces', [AnnonceController::class, 'index'])->name('annonces.index')->middleware('permission:annonces.view');
+    Route::post('annonces', [AnnonceController::class, 'store'])->name('annonces.store')->middleware('permission:annonces.create');
+    Route::put('annonces/{annonce}', [AnnonceController::class, 'update'])->name('annonces.update')->middleware('permission:annonces.edit');
+    Route::delete('annonces/{annonce}', [AnnonceController::class, 'destroy'])->name('annonces.destroy')->middleware('permission:annonces.delete');
 });
 
 require __DIR__.'/settings.php';

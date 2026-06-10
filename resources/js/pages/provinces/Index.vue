@@ -340,36 +340,51 @@ const languageOptions = [
 
                 <form @submit.prevent="submitCreate" class="space-y-6">
                     <div class="grid gap-6">
-                        <div class="space-y-2">
-                            <Label for="name"
-                                class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ __('provinces.name') }}</Label>
-                            <Input id="name" v-model="form.name" :placeholder="__('provinces.name_placeholder')" required
-                                class="h-12 rounded-xl border-slate-100 bg-slate-50/70 dark:bg-slate-900/80 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-900 focus:ring-rdc-blue" />
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <Label for="postal_code"
-                                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ __('provinces.postal_code') }}</Label>
-                                <Input id="postal_code" v-model="form.postal_code" :placeholder="__('provinces.postal_code_placeholder')" required
-                                    class="h-12 rounded-xl border-slate-100 dark:border-slate-700" />
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-10 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-1">
+                                <MapPin class="size-5" />
                             </div>
-                            <div class="space-y-2">
-                                <Label for="creation_date"
-                                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ __('provinces.integration_date') }}</Label>
-                                <Input id="creation_date" v-model="form.creation_date" type="date" required
-                                    class="h-12 rounded-xl border-slate-100 dark:border-slate-700" />
+                            <div class="flex-1 space-y-2">
+                                <Label for="name"
+                                    class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('provinces.name') }}</Label>
+                                <Input id="name" v-model="form.name" :placeholder="__('provinces.name_placeholder')" required
+                                    class="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-rdc-blue" />
                             </div>
                         </div>
 
-                        <div class="space-y-2">
-                            <Label for="address"
-                                class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 ml-1">{{ __('provinces.address') }}</Label>
-                            <Input id="address" v-model="form.address" :placeholder="__('provinces.address_placeholder')" required
-                                class="h-12 rounded-xl border-slate-100 dark:border-slate-700" />
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-10 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-1">
+                                <Globe class="size-5" />
+                            </div>
+                            <div class="flex-1 grid grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <Label for="postal_code"
+                                        class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('provinces.postal_code') }}</Label>
+                                    <Input id="postal_code" v-model="form.postal_code" :placeholder="__('provinces.postal_code_placeholder')" required
+                                        class="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" />
+                                </div>
+                                <div class="space-y-2">
+                                    <Label for="creation_date"
+                                        class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('provinces.integration_date') }}</Label>
+                                    <Input id="creation_date" v-model="form.creation_date" type="date" required
+                                        class="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" />
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="bg-slate-50 p-6 rounded-3xl space-y-4 dark:bg-slate-900/90">
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-10 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-1">
+                                <MapPin class="size-5" />
+                            </div>
+                            <div class="flex-1 space-y-2">
+                                <Label for="address"
+                                    class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('provinces.address') }}</Label>
+                                <Input id="address" v-model="form.address" :placeholder="__('provinces.address_placeholder')" required
+                                    class="h-12 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" />
+                            </div>
+                        </div>
+
+                        <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30 space-y-4">
                             <p
                                 class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-2">
                                 <Globe class="size-3 text-rdc-blue" /> {{ __('provinces.work_languages') }}
@@ -467,16 +482,22 @@ const languageOptions = [
                             </div>
                         </div>
 
-                        <div class="bg-slate-50 p-6 rounded-3xl space-y-6 dark:bg-slate-900/90">
+                        <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30 space-y-4">
                             <div class="space-y-4">
                                 <p
-                                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
-                                    {{ __('provinces.communication') }}</p>
+                                    class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-2">
+                                    <Mail class="size-3 text-rdc-blue" /> {{ __('provinces.communication') }}</p>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <Input v-model="form.contacts_email" :placeholder="__('common.email')"
-                                        class="rounded-xl border-none bg-white dark:bg-slate-950 shadow-sm h-10 text-xs" />
-                                    <Input v-model="form.contacts_phone" :placeholder="__('common.phone')"
-                                        class="rounded-xl border-none bg-white dark:bg-slate-950 shadow-sm h-10 text-xs" />
+                                    <div class="relative">
+                                        <Mail class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                                        <Input v-model="form.contacts_email" :placeholder="__('common.email')"
+                                            class="rounded-xl border-slate-200 bg-white dark:bg-slate-950 shadow-sm h-10 text-xs pl-10" />
+                                    </div>
+                                    <div class="relative">
+                                        <Phone class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                                        <Input v-model="form.contacts_phone" :placeholder="__('common.phone')"
+                                            class="rounded-xl border-slate-200 bg-white dark:bg-slate-950 shadow-sm h-10 text-xs pl-10" />
+                                    </div>
                                 </div>
                             </div>
 

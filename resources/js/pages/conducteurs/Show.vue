@@ -2,7 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import {
     ChevronLeft, User, CreditCard, Phone, Mail, MapPin,
-    Calendar, Globe, ShieldCheck, Car, Anchor,
+    Calendar, Globe, ShieldCheck, Car, Anchor, FileText, UserCheck,
     Settings, Info, ExternalLink, Printer, Download, Activity
 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -107,31 +107,45 @@ defineOptions({
                     </div>
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
-                        <div
-                            class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{{ __('conducteurs.form.license') }}
-                            </p>
-                            <p class="text-sm font-black text-slate-900 dark:text-slate-100">{{
-                                conducteur.license_number || __('conducteurs.no_license') }}</p>
+                        <div class="relative overflow-hidden p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-blue-100 dark:border-rdc-blue/20 shadow-sm">
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent dark:from-rdc-blue/[0.04]" />
+                            <div class="relative">
+                                <div class="size-8 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue mb-2">
+                                    <CreditCard class="size-4" />
+                                </div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.form.license') }}</p>
+                                <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">{{ conducteur.license_number || __('conducteurs.no_license') }}</p>
+                            </div>
                         </div>
-                        <div
-                            class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{{ __('permis.category') }}</p>
-                            <p class="text-sm font-black text-slate-900 dark:text-slate-100">{{
-                                conducteur.license_category || __('common.na') }}</p>
+                        <div class="relative overflow-hidden p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-purple-100 dark:border-purple-500/20 shadow-sm">
+                            <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent dark:from-purple-500/[0.04]" />
+                            <div class="relative">
+                                <div class="size-8 rounded-lg bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-2">
+                                    <FileText class="size-4" />
+                                </div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('permis.category') }}</p>
+                                <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">{{ conducteur.license_category || __('common.na') }}</p>
+                            </div>
                         </div>
-                        <div
-                            class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{{ __('conducteurs.gender') }}
-                            </p>
-                            <p class="text-sm font-black text-slate-900 dark:text-slate-100">{{ conducteur.gender
-                                === 'M' ? __('common.male') : __('common.female') }}</p>
+                        <div class="relative overflow-hidden p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
+                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-transparent dark:from-emerald-500/[0.04]" />
+                            <div class="relative">
+                                <div class="size-8 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-2">
+                                    <UserCheck class="size-4" />
+                                </div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.gender') }}</p>
+                                <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">{{ conducteur.gender === 'M' ? __('common.male') : __('common.female') }}</p>
+                            </div>
                         </div>
-                        <div
-                            class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{{ __('conducteurs.form.id_expiration') }}</p>
-                            <p class="text-sm font-black text-rdc-red">{{ formatDate(conducteur.expiration_date) }}
-                            </p>
+                        <div class="relative overflow-hidden p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-red-100 dark:border-rdc-red/20 shadow-sm">
+                            <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-transparent dark:from-rdc-red/[0.04]" />
+                            <div class="relative">
+                                <div class="size-8 rounded-lg bg-rdc-red/10 dark:bg-rdc-red/20 flex items-center justify-center text-rdc-red mb-2">
+                                    <Calendar class="size-4" />
+                                </div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.form.id_expiration') }}</p>
+                                <p class="text-sm font-black text-rdc-red mt-0.5">{{ formatDate(conducteur.expiration_date) }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,40 +163,63 @@ defineOptions({
                         <CreditCard class="size-5" />
                         <h2 class="text-lg font-black tracking-tight uppercase">{{ __('conducteurs.form.id_birth') }}</h2>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div class="space-y-6">
-                            <div class="space-y-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('conducteurs.form.birth') }}</p>
-                                <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{
-                                    formatDate(conducteur.birth_date) }} à {{ conducteur.birth_place }}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                    <Calendar class="size-4" />
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.form.birth') }}</p>
+                                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ formatDate(conducteur.birth_date) }} à {{ conducteur.birth_place }}</p>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('conducteurs.form.filiation') }}
-                                </p>
-                                <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ __('conducteurs.form.parentage') }} {{
-                                    conducteur.father_name }} et de {{ conducteur.mother_name }}</p>
+                            <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                    <Users class="size-4" />
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.form.filiation') }}</p>
+                                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ __('conducteurs.form.parentage') }} {{ conducteur.father_name }} et de {{ conducteur.mother_name }}</p>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('conducteurs.form.marital_status') }}</p>
-                                <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{
-                                    conducteur.marital_status }}</p>
+                            <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                    <ShieldCheck class="size-4" />
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.form.marital_status') }}</p>
+                                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ conducteur.marital_status }}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="space-y-6">
-                            <div class="space-y-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('conducteurs.form.id_type') }}</p>
-                                <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{
-                                    conducteur.id_piece_type }}</p>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                    <FileText class="size-4" />
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.form.id_type') }}</p>
+                                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ conducteur.id_piece_type }}</p>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('conducteurs.form.id_number') }}</p>
-                                <p class="text-sm font-black text-rdc-blue">{{ conducteur.id_piece_number }}</p>
+                            <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                    <CreditCard class="size-4" />
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.form.id_number') }}</p>
+                                    <p class="text-sm font-black text-rdc-blue">{{ conducteur.id_piece_number }}</p>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('conducteurs.form.issued_on') }}</p>
-                                <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{
-                                    formatDate(conducteur.id_piece_issued_at) }} à {{
-                                        conducteur.id_piece_issued_place }}</p>
+                            <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                    <MapPin class="size-4" />
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('conducteurs.form.issued_on') }}</p>
+                                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ formatDate(conducteur.id_piece_issued_at) }} à {{ conducteur.id_piece_issued_place }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>

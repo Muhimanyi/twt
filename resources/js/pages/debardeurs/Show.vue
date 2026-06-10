@@ -105,26 +105,39 @@ defineOptions({
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8 pt-4">
-                        <div class="space-y-1">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.current_assignment') }}</p>
-                            <p class="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                                <MapPin class="size-4 text-rdc-blue" /> {{ debardeur.province.name }}
-                            </p>
-                            <p class="text-xs text-slate-500">{{ debardeur.assignment_place }}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                        <div class="relative overflow-hidden p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-blue-100 dark:border-rdc-blue/20 shadow-sm">
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent dark:from-rdc-blue/[0.04]" />
+                            <div class="relative">
+                                <div class="size-8 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue mb-2">
+                                    <MapPin class="size-4" />
+                                </div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.current_assignment') }}</p>
+                                <p class="font-bold text-slate-800 dark:text-slate-200 mt-0.5">{{ debardeur.province.name }}</p>
+                                <p class="text-xs text-slate-500">{{ debardeur.assignment_place }}</p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.vest_number_label') }}
-                            </p>
-                            <p class="font-black text-2xl text-rdc-blue font-mono">{{ debardeur.vest_number || __('common.none') }}
-                            </p>
+                        <div class="relative overflow-hidden p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-amber-100 dark:border-amber-500/20 shadow-sm">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-50 to-transparent dark:from-amber-500/[0.04]" />
+                            <div class="relative">
+                                <div class="size-8 rounded-lg bg-amber-500/10 dark:bg-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400 mb-2">
+                                    <Hash class="size-4" />
+                                </div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.vest_number_label') }}</p>
+                                <p class="font-black text-2xl text-rdc-blue font-mono mt-0.5">{{ debardeur.vest_number || __('common.none') }}</p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.system_status') }}
-                            </p>
-                            <div class="flex items-center gap-2 text-green-500 font-bold">
-                                <div class="size-2 rounded-full bg-green-500 animate-pulse"></div>
-                                {{ __('debardeurs.active_record') }}
+                        <div class="relative overflow-hidden p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
+                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-transparent dark:from-emerald-500/[0.04]" />
+                            <div class="relative">
+                                <div class="size-8 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-2">
+                                    <ShieldCheck class="size-4" />
+                                </div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.system_status') }}</p>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <div class="size-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                    <span class="text-sm font-bold text-emerald-600 dark:text-emerald-400">{{ __('debardeurs.active_record') }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -143,34 +156,60 @@ defineOptions({
                         <h2 class="text-xl font-black">{{ __('debardeurs.personal_info') }}</h2>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-y-8 gap-x-12">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.form.name_postname') }}</label>
-                            <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.last_name }} {{
-                                debardeur.middle_name || '' }}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                <User class="size-4" />
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.form.name_postname') }}</p>
+                                <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.last_name }} {{ debardeur.middle_name || '' }}</p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <label
-                                class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.form.first_name') }}</label>
-                            <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.first_name }}</p>
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                <User class="size-4" />
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.form.first_name') }}</p>
+                                <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.first_name }}</p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.form.birth_place_date') }}</label>
-                            <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.birth_place }}, {{
-                                formatDate(debardeur.birth_date) }}</p>
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                <Calendar class="size-4" />
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.form.birth_place_date') }}</p>
+                                <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.birth_place }}, {{ formatDate(debardeur.birth_date) }}</p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.form.gender_marital') }}</label>
-                            <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.gender === 'M' ?
-                                __('debardeurs.gender.male') : __('debardeurs.gender.female') }} — {{ debardeur.marital_status }}</p>
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                <Users class="size-4" />
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.form.gender_marital') }}</p>
+                                <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.gender === 'M' ? __('debardeurs.gender.male') : __('debardeurs.gender.female') }} — {{ debardeur.marital_status }}</p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.form.filiation_father') }}</label>
-                            <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.father_name }}</p>
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                <Users class="size-4" />
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.form.filiation_father') }}</p>
+                                <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.father_name }}</p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('debardeurs.form.filiation_mother') }}</label>
-                            <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.mother_name }}</p>
+                        <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                            <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                <Users class="size-4" />
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('debardeurs.form.filiation_mother') }}</p>
+                                <p class="font-bold text-slate-800 dark:text-slate-200">{{ debardeur.mother_name }}</p>
+                            </div>
                         </div>
                     </div>
 

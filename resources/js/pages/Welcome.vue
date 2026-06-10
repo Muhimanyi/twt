@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import {
     Users, Car, Anchor, FileCheck, Wallet,
     ShieldCheck, ArrowRight, MapPin, Activity,
-    Building2
+    Building2, Newspaper, Calendar, ChevronRight
 } from 'lucide-vue-next';
 import { dashboard, login, register } from '@/routes';
 import ThreeDViewer from '@/components/ThreeDViewer.vue';
@@ -13,9 +13,17 @@ import { useAnimateOnScroll, useCountUp } from '@/composables/useAnimateOnScroll
 withDefaults(
     defineProps<{
         canRegister: boolean;
+        annonces?: Array<{
+            id: number;
+            title: string;
+            excerpt?: string;
+            content: string;
+            published_at: string;
+        }>;
     }>(),
     {
         canRegister: true,
+        annonces: () => [],
     },
 );
 
@@ -80,6 +88,7 @@ const stats = [
 const heroVisible = ref(false);
 const { el: statsEl, isVisible: statsVisible } = useAnimateOnScroll(0.3);
 const { el: modulesEl, isVisible: modulesVisible } = useAnimateOnScroll(0.1);
+const { el: annoncesEl, isVisible: annoncesVisible } = useAnimateOnScroll(0.1);
 const { el: provinceEl, isVisible: provinceVisible } = useAnimateOnScroll(0.3);
 
 const statCounters = stats.map(s => useCountUp(ref(s.value), 2000));
@@ -235,6 +244,40 @@ const formatStat = (n: number) => n.toLocaleString('fr-FR') + '+';
                         </div>
                         <h3 class="text-lg font-black text-slate-900 mb-3 group-hover:text-rdc-blue transition-colors duration-300">{{ mod.title }}</h3>
                         <p class="text-sm text-slate-400 leading-relaxed">{{ mod.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Annonces -->
+        <section v-if="annonces.length" ref="annoncesEl" class="py-24 bg-white/20 backdrop-blur-sm border-y border-slate-100">
+            <div class="max-w-7xl mx-auto px-6">
+                <div :class="['transition-all duration-700 ease-out', annoncesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8']"
+                    class="text-center space-y-4 mb-16">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-rdc-blue/10 text-rdc-blue text-xs font-black uppercase tracking-widest">
+                        <Newspaper class="size-3 inline mr-1.5 -mt-0.5" />Communications
+                    </span>
+                    <h2 class="text-4xl font-black tracking-tighter text-slate-900">
+                        Annonces & <span class="text-rdc-blue">Publications</span>
+                    </h2>
+                    <p class="text-slate-400 max-w-xl mx-auto">
+                        Informations officielles et communications de la Direction des Transports
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div v-for="(a, i) in annonces" :key="a.id"
+                        :class="['transition-all duration-700 ease-out', annoncesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16']"
+                        :style="{ transitionDelay: `${i * 100}ms` }"
+                        class="group p-6 rounded-3xl border border-slate-100 bg-white/40 backdrop-blur-sm hover:shadow-2xl hover:shadow-slate-200/50 hover:border-rdc-blue/20 hover:-translate-y-1 transition-all duration-300">
+                        <div class="size-10 rounded-xl bg-rdc-blue/10 flex items-center justify-center text-rdc-blue mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <Newspaper class="size-5" />
+                        </div>
+                        <h3 class="text-lg font-black text-slate-900 mb-2 group-hover:text-rdc-blue transition-colors duration-300 line-clamp-2">{{ a.title }}</h3>
+                        <p v-if="a.excerpt" class="text-sm text-slate-400 leading-relaxed mb-4 line-clamp-2">{{ a.excerpt }}</p>
+                        <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
+                            <Calendar class="size-3.5" />
+                            {{ new Date(a.published_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+                        </div>
                     </div>
                 </div>
             </div>

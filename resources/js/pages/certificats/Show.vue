@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import {
-    ChevronLeft, FileCheck, Car, Anchor, User,
+    ChevronLeft, FileCheck, FileText, Car, Anchor, User,
     Calendar, ShieldCheck, Printer, Download, Eye, Globe, MapPin,
-    Info, Settings
+    Info, Settings, Tag
 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -126,39 +126,60 @@ defineOptions({
                             <h2 class="text-lg font-black tracking-tight uppercase">{{ __('certificats.details_section') }}</h2>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-6">
-                                <div class="space-y-1">
-                                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('certificats.field_number') }}</p>
-                                    <p class="text-sm font-black text-slate-900 dark:text-slate-100 font-mono">{{
-                                        certificat.certificate_number }}</p>
+                                <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                    <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                        <FileText class="size-4" />
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('certificats.field_number') }}</p>
+                                        <p class="text-sm font-black text-slate-900 dark:text-white font-mono truncate">{{ certificat.certificate_number }}</p>
+                                    </div>
                                 </div>
-                                <div class="space-y-1">
-                                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('certificats.field_type') }}</p>
-                                    <Badge :class="certificat.type === 'Possession' ? 'bg-rdc-red' : 'bg-rdc-blue'"
-                                        class="text-white font-black px-4 py-1">
-                                        {{ certificat.type === 'Possession' ? __('certificats.type_possession') : __('certificats.type_identification') }}
-                                    </Badge>
+                                <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                    <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                        <Tag class="size-4" />
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('certificats.field_type') }}</p>
+                                        <Badge :class="certificat.type === 'Possession' ? 'bg-rdc-red' : 'bg-rdc-blue'"
+                                            class="text-white font-bold px-3 py-0.5 text-[10px] mt-0.5">
+                                            {{ certificat.type === 'Possession' ? __('certificats.type_possession') : __('certificats.type_identification') }}
+                                        </Badge>
+                                    </div>
                                 </div>
-                                <div class="space-y-1">
-                                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('certificats.field_issued') }}</p>
-                                    <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{
-                                        formatDate(certificat.issued_at) }}</p>
+                                <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                    <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                        <Calendar class="size-4" />
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('certificats.field_issued') }}</p>
+                                        <p class="text-sm font-bold text-slate-700 dark:text-slate-300">{{ formatDate(certificat.issued_at) }}</p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="space-y-6">
-                                <div class="space-y-1">
-                                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('certificats.field_status') }}
-                                    </p>
-                                    <div class="flex items-center gap-2 text-green-500">
+                                <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                    <div class="size-9 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
                                         <ShieldCheck class="size-4" />
-                                        <span class="text-sm font-black uppercase tracking-widest">{{ __('certificats.status_valid') }}</span>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('certificats.field_status') }}</p>
+                                        <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mt-0.5">
+                                            <div class="size-2 rounded-full bg-emerald-500 animate-pulse" />
+                                            <span class="text-sm font-black uppercase tracking-wider">{{ __('certificats.status_valid') }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="space-y-1">
-                                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">{{ __('certificats.field_owner') }}</p>
-                                    <p class="text-sm font-black text-slate-900 dark:text-slate-100 uppercase">{{
-                                        certificat.owner_name }}</p>
+                                <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30">
+                                    <div class="size-9 rounded-lg bg-rdc-blue/10 dark:bg-rdc-blue/20 flex items-center justify-center text-rdc-blue shrink-0 mt-0.5">
+                                        <User class="size-4" />
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ __('certificats.field_owner') }}</p>
+                                        <p class="text-sm font-black text-slate-900 dark:text-white uppercase">{{ certificat.owner_name }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

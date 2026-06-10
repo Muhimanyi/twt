@@ -55,7 +55,7 @@ const mainNavItems = computed<NavItem[]>(() => [
         title: __('nav.dashboard'),
         href: dashboard(),
         icon: LayoutDashboard,
-        class: 'rounded-full text-center bg-orange-500 text-black p-2 font-semibold',
+        buttonClass: 'tw-dashboard-btn px-4',
     }] : []),
     ...(can('conducteurs.view') || can('debardeurs.view') || can('engins.view') ? [{
         title: __('nav.recensement'),
@@ -135,7 +135,7 @@ const mainNavItems = computed<NavItem[]>(() => [
         class: "px-2",
 
     },
-    {
+    ...(can('annonces.view') ? [{
         title: __('nav.communication'),
         icon: MessageSquare,
         children: [
@@ -144,7 +144,7 @@ const mainNavItems = computed<NavItem[]>(() => [
         ],
         class: "px-2",
 
-    },
+    }] : []),
     {
         title: __('nav.configuration'),
         icon: Gauge,

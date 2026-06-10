@@ -508,16 +508,17 @@ function toggleUserExpanded(id: number) {
                     </div>
 
                     <!-- Global Roles -->
-                    <div class="bg-slate-50 p-6 rounded-3xl space-y-4 dark:bg-slate-900/90">
+                    <div class="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/30 space-y-4">
                         <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
                             <Shield class="size-3 text-rdc-blue" /> {{ __('users.role') }}
                         </p>
                         <div class="grid grid-cols-2 gap-y-3 gap-x-4">
-                            <div v-for="role in roleOptions" :key="role.value" class="flex items-center space-x-3">
+                            <div v-for="(role, idx) in roleOptions" :key="role.value"
+                                class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-white dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+                                @click="toggleRole(role.value)">
                                 <input type="checkbox" :checked="form.role.includes(role.value)"
-                                    @change="toggleRole(role.value)"
-                                    class="size-5 rounded border-slate-300 text-rdc-blue focus:ring-rdc-blue cursor-pointer" />
-                                <label class="text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer">{{ role.label }}</label>
+                                    class="size-5 rounded border-slate-300 text-rdc-blue focus:ring-rdc-blue cursor-pointer pointer-events-none" />
+                                <label class="text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">{{ role.label }}</label>
                             </div>
                         </div>
                     </div>

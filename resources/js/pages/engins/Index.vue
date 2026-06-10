@@ -372,35 +372,35 @@ defineOptions({
             </div>
 
             <!-- Category Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div @click="router.visit('/engins')"
-                    class="p-6 rounded-xl border border-slate-200 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800 cursor-pointer hover:border-rdc-blue transition-all"
-                    :class="{ 'ring-2 ring-rdc-blue/50 bg-rdc-blue/5': !currentCategory }">
-                    <div class="flex items-center justify-between mb-4">
-                        <div
-                            class="size-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 dark:bg-slate-900 dark:text-slate-400">
+                    class="relative overflow-hidden p-5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-900 shadow-sm cursor-pointer hover:shadow-md hover:border-rdc-blue/40 transition-all duration-300"
+                    :class="{ 'ring-2 ring-rdc-blue/40 bg-rdc-blue/[0.03]': !currentCategory }">
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-50 to-transparent dark:from-slate-800/50" />
+                    <div class="relative">
+                        <div class="size-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 mb-3">
                             <Users class="size-5" />
                         </div>
-                        <Badge variant="outline" class="text-[10px] font-black uppercase tracking-widest">{{ __('common.total') }}</Badge>
+                        <Badge variant="outline" class="text-[9px] font-bold uppercase tracking-wider px-2 py-0 mb-2">{{ __('common.total') }}</Badge>
+                        <p class="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{{ __('engins.all') }}</p>
+                        <p class="text-2xl font-black text-slate-900 dark:text-white mt-0.5">{{ stats.total }}</p>
                     </div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ __('engins.all') }}</p>
-                    <p class="text-2xl font-black text-slate-900 dark:text-slate-100">{{ stats.total }}</p>
                 </div>
 
                 <div v-for="cat in categories" :key="cat.value" @click="router.visit(`/engins/category/${cat.value}`)"
-                    class="p-6 rounded-xl border border-slate-200 bg-white shadow-sm dark:bg-slate-950 dark:border-slate-800 cursor-pointer hover:border-rdc-blue transition-all"
-                    :class="{ 'ring-2 ring-rdc-blue/50 bg-rdc-blue/5': currentCategory === cat.value }">
-                    <div class="flex items-center justify-between mb-4">
-                        <div
-                            class="size-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 dark:bg-slate-900 dark:text-slate-400">
+                    class="relative overflow-hidden p-5 rounded-xl border border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-900 shadow-sm cursor-pointer hover:shadow-md hover:border-rdc-blue/40 transition-all duration-300"
+                    :class="{ 'ring-2 ring-rdc-blue/40 bg-rdc-blue/[0.03]': currentCategory === cat.value }">
+                    <div class="absolute inset-0 bg-gradient-to-br from-transparent to-slate-50/50 dark:to-slate-800/30" />
+                    <div class="relative">
+                        <div class="size-10 rounded-lg flex items-center justify-center mb-3"
+                            :class="cat.value === 'roulant' ? 'bg-rdc-blue/10 dark:bg-rdc-blue/20 text-rdc-blue' : 'bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400'">
                             <component :is="cat.icon" class="size-5" />
                         </div>
-                        <Badge variant="outline" class="text-[10px] font-black uppercase tracking-widest">{{ __('common.type') }}</Badge>
+                        <Badge variant="outline" class="text-[9px] font-bold uppercase tracking-wider px-2 py-0 mb-2">{{ __('common.type') }}</Badge>
+                        <p class="text-[11px] font-bold uppercase tracking-wider"
+                            :class="cat.value === 'roulant' ? 'text-rdc-blue' : 'text-cyan-500'">{{ cat.label }}</p>
+                        <p class="text-2xl font-black text-slate-900 dark:text-white mt-0.5">{{ stats.by_category[cat.value] || 0 }}</p>
                     </div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">{{ cat.label }}</p>
-                    <p class="text-2xl font-black text-slate-900 dark:text-slate-100">{{ stats.by_category[cat.value] ||
-                        0
-                        }}</p>
                 </div>
             </div>
 
